@@ -1,0 +1,17 @@
+{
+  "default": [
+    "test"
+  ],
+  "test": [
+    "jshint",
+    "mochacov:html",
+    "mochacov:spec"
+  ],
+  "ci-test": [
+    "test",
+    "mochacov:ci"
+  ],
+  "dev": [
+    "dactylographsy"
+  ]
+}

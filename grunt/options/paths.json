@@ -1,0 +1,10 @@
+{
+  "src": {
+    "lint": "tasks/**/*.js"
+  },
+  "test": {
+    "mocha": [
+      "test/**/*.js"
+    ]
+  }
+}
