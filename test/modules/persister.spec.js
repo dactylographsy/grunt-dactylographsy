@@ -4,14 +4,16 @@ var expect = require('chai').expect,
 var Persister = require('../../tasks/modules/persister'),
     persister;
 
-var file = './test/fixtures/persister.json';
+var
+  root = './test/fixtures',
+  file = 'persister.json';
 
 describe('Persister specification', function() {
   before(function() {
   })
 
   beforeEach(function() {
-    persister = new Persister(file);
+    persister = new Persister(root, file);
   });
 
   it('creates a file as a store', function() {

@@ -4,15 +4,15 @@ var expect = require('chai').expect,
 var Fingerprinter = require('../../tasks/modules/fingerprinter'),
     fingerprinter;
 
-describe('Persister specification', function() {
+describe('Fingerprinter specification', function() {
   beforeEach(function() {
   });
 
   beforeEach(function() {
-    fingerprinter = new Fingerprinter();
+    fingerprinter = new Fingerprinter('./test/fixtures');
   });
 
-  it('hases a set of files', function() {
+  it('hashes a set of files', function() {
     var
       _hashes,
       _file = './test/fixtures/persister.json',
