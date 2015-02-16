@@ -1,11 +1,12 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var _ = require('lodash');
+var
+  fs = require('fs'),
+  path = require('path'),
+  _ = require('lodash');
 
-function FileAnalyzer(exclusions) {
-  this._exclusions = exclusions;
+function FileAnalyzer(root) {
+  this.root = root;
 }
 
 FileAnalyzer.prototype.getFiles = function(globbedFiles) {
@@ -20,6 +21,14 @@ FileAnalyzer.prototype.getFiles = function(globbedFiles) {
   });
 
   return files;
+};
+
+FileAnalyzer.prototype.duplicate = function(file, hash) {
+  var
+    _extension = path.extname(file),
+    _base = path.basename(file, _extension);
+
+  fs.writeFileSync(this.root + '/' + _base + '-' + hash + _extension, fs.readFileSync(file));
 };
 
 module.exports = FileAnalyzer;
