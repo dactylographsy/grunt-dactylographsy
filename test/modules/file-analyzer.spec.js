@@ -5,7 +5,7 @@ var expect = require('chai').expect,
 
 describe('Formatter specification', function() {
   beforeEach(function() {
-    fileAnalyzer = new FileAnalyzer(['.txt']);
+    fileAnalyzer = new FileAnalyzer();
   });
 
   it('returns files and omits directories', function() {
