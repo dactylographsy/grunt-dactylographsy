@@ -105,9 +105,6 @@
     // Set the url
     script.src = url;
 
-    // Append it to the head
-    // *Note:* Binding it to body not possible cause it may not be parsed if `Scandio.libs` is
-    // called in html's head-section
     injectInto.appendChild(script);
 
     return url;

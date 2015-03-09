@@ -26,9 +26,15 @@ FileAnalyzer.prototype.getFiles = function(globbedFiles) {
 FileAnalyzer.prototype.duplicate = function(file, hash) {
   var
     _extension = path.extname(file),
+    _directory = path.dirname(file),
     _base = path.basename(file, _extension);
 
-  fs.writeFileSync(this.root + '/' + _base + '-' + hash + _extension, fs.readFileSync(file));
+  fs.writeFileSync(
+    _directory + '/' +
+    _base + '-' +
+    hash + _extension,
+    fs.readFileSync(file)
+  );
 };
 
 module.exports = FileAnalyzer;
