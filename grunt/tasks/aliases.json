@@ -1,6 +1,7 @@
 {
   "default": [
-    "test"
+    "test",
+    "uglify"
   ],
   "test": [
     "jshint",

@@ -5,7 +5,9 @@
 
   var
     Dactylographsy,
+    initialize,
     previousDactylographsy = root.Dactylographsy,
+    executingScript = document.getElementById('dactylographsy'),
     injected = {
       css: {},
       js: {}
@@ -35,10 +37,21 @@
     return this;
   };
 
+  Dactylographsy.readAttrOnScript = function(attr) {
+    var
+      _attr = executingScript.getAttribute('data-' + attr);
+
+    if (_attr) {
+      return JSON.parse(_attr);
+    } else {
+      return undefined;
+    }
+  };
+
   Dactylographsy.ajaxGet = function(url, success, error, options) {
     var
       xhr = new XMLHttpRequest(),
-      _options = options || options;
+      _options = options || {};
 
     if ('withCredentials' in xhr) {
       // XHR for Chrome/Firefox/Opera/Safari.
@@ -110,6 +123,53 @@
     return url;
   };
 
+  Dactylographsy.extension = function(filename) {
+    return filename.split('.').pop();
+  };
+
+  Dactylographsy.basename = function(path) {
+    return path.replace(/.*\/|\.[^.]*$/g, '');
+  };
+
+  Dactylographsy.fileNameWithFingerprint = function(dependency, fingerprint) {
+    var
+      _extension = Dactylographsy.extension(dependency),
+      _filename = Dactylographsy.basename(dependency);
+
+    return (
+      _filename +
+      '-' +
+      fingerprint +
+      '.' +
+      _extension
+    );
+  };
+
+  Dactylographsy.injectManifest = function(manifest) {
+    var
+      _dependencies = Object.keys(manifest);
+
+    for (var i = 0, len = _dependencies.length; i < len; i++) {
+      var
+        _dependency = _dependencies[i],
+        _fingerprint = manifest[_dependency],
+        _extension = Dactylographsy.extension(_dependency);
+
+      switch (_extension) {
+        case 'css':
+          Dactylographsy.css(
+            Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint)
+          );
+          break;
+        case 'js':
+          Dactylographsy.js(
+            Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint)
+          );
+          break;
+      }
+    }
+  };
+
   Dactylographsy.css = function(url) {
     var
       link = document.createElement('link'),
@@ -122,4 +182,18 @@
 
     injectInto.appendChild(link);
   };
+
+  initialize = function() {
+    var
+      manifests = Dactylographsy.readAttrOnScript('manifests'),
+      injectManifest = function(xhr, response) {
+        Dactylographsy.injectManifest(JSON.parse(response));
+      };
+
+    for (var i = 0, len = manifests.length; i < len; i++) {
+      Dactylographsy.ajaxGet(manifests[i], injectManifest);
+    }
+  };
+
+  initialize();
 }(this, window, document));
