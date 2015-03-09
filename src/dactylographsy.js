@@ -1,4 +1,4 @@
-/*global window, document*/
+/* global window, document, XMLHttpRequest, XDomainRequest */
 
 ;(function(root, window, document, undefined) {
   "use strict";
@@ -33,6 +33,46 @@
 
     // Return yerself to continue
     return this;
+  };
+
+  Dactylographsy.ajaxGet = function(url, success, error, options) {
+    var
+      xhr = new XMLHttpRequest(),
+      _options = options || options;
+
+    if ('withCredentials' in xhr) {
+      // XHR for Chrome/Firefox/Opera/Safari.
+      xhr.open('GET', url, true);
+    } else if (typeof XDomainRequest !== 'undefined') {
+      // XDomainRequest for IE.
+      xhr = new XDomainRequest();
+      xhr.open('GET', url);
+    } else {
+      // CORS not supported.
+      xhr = null;
+    }
+
+    if (_options.withCredentials) {
+      xhr.withCredentials = true;
+    }
+
+    if (_options.customHeaders) {
+      for (var i = 0; i < _options.customHeaders.length; i++) {
+        var header = _options.customHeaders[i];
+        xhr.setRequestHeader(header.name, header.value);
+      }
+    }
+
+    // Response handlers.
+    xhr.onload = function() {
+      success(xhr, xhr.responseText);
+    };
+
+    xhr.onerror = function() {
+      error(xhr);
+    };
+
+    xhr.send();
   };
 
   Dactylographsy.js = function(url, success) {
