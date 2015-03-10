@@ -6,6 +6,8 @@
   var
     Dactylographsy,
     initialize,
+    manifests,
+    config,
     previousDactylographsy = root.Dactylographsy,
     executingScript = document.getElementById('dactylographsy'),
     injected = {
@@ -145,6 +147,18 @@
     );
   };
 
+  Dactylographsy.fileNameWithoutFingerprint = function(dependency) {
+    var
+      _extension = Dactylographsy.extension(dependency),
+      _filename = Dactylographsy.basename(dependency);
+
+    return (
+      _filename +
+      '.' +
+      _extension
+    );
+  };
+
   Dactylographsy.injectManifest = function(manifest) {
     var
       _dependencies = Object.keys(manifest);
@@ -158,12 +172,16 @@
       switch (_extension) {
         case 'css':
           Dactylographsy.css(
-            Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint)
+            (config.fingerprint) ?
+              Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint) :
+              Dactylographsy.fileNameWithoutFingerprint(_dependency)
           );
           break;
         case 'js':
           Dactylographsy.js(
-            Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint)
+            (config.fingerprint) ?
+              Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint) :
+              Dactylographsy.fileNameWithoutFingerprint(_dependency)
           );
           break;
       }
@@ -185,10 +203,12 @@
 
   initialize = function() {
     var
-      manifests = Dactylographsy.readAttrOnScript('manifests'),
       injectManifest = function(xhr, response) {
         Dactylographsy.injectManifest(JSON.parse(response));
       };
+
+    manifests = Dactylographsy.readAttrOnScript('manifests');
+    config = Dactylographsy.readAttrOnScript('config');
 
     for (var i = 0, len = manifests.length; i < len; i++) {
       Dactylographsy.ajaxGet(manifests[i], injectManifest);
