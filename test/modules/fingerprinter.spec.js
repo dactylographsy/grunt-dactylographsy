@@ -16,12 +16,17 @@ describe('Fingerprinter specification', function() {
     var
       _hashes,
       _file = './test/fixtures/persister.json',
-      _hash = '92429dc13b570a63872bd1e8a1a132cfc98420d1';
+      _hash = 'e75b028c57c3e4ab82eb6e6d9cbd4052d2a61301';
 
     _hashes = fingerprinter.hashFiles([
       _file
     ]);
 
-    expect(_hashes['persister.json']).to.equal(_hash);
+    console.log(_hashes)
+
+    expect(_hashes[_hash].hash).to.equal(_hash);
+    expect(_hashes[_hash].extension).to.equal('.json');
+    expect(_hashes[_hash].file).to.equal('persister.json');
+    expect(_hashes[_hash].path).to.equal('./test/fixtures');
   });
 });

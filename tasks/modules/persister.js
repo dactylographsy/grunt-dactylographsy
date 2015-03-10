@@ -2,12 +2,15 @@
 
 var fs = require('fs');
 
-function Persister(root, location) {
+function Persister(packageMeta, root, location) {
+  this._packageMeta = packageMeta;
   this._root = root;
   this._location = location;
 }
 
 Persister.prototype.write = function(data) {
+  data.package = this._packageMeta;
+
   var json = JSON.stringify(data, null, 2);
 
   fs.writeFileSync(this._root + '/' + this._location, json);

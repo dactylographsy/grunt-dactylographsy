@@ -26,7 +26,13 @@ Fingerprinter.prototype.hashFiles = function(files) {
 
     _digest = _hash.digest('hex');
 
-    _prints[path.basename(file)] = _digest;
+    _prints[_digest] = {
+      hash: _digest,
+      file: path.basename(file),
+      path: path.dirname(file),
+      extension: path.extname(file)
+    };
+
     _that.fileAnalyzer.duplicate(file, _digest);
   });
 

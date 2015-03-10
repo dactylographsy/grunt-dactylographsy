@@ -20,7 +20,8 @@ module.exports = function(grunt) {
     var
       options = this.options({
         location: 'dactylographsy.json',
-        root: 'dist'
+        root: 'dist',
+        package: 'None'
       });
 
     var
@@ -28,7 +29,7 @@ module.exports = function(grunt) {
       prints,
       fileAnalyzer = new FileAnalyzer(options.root),
       fingerprinter = new Fingerprinter(options.root),
-      persister = new Persister(options.root, options.location);
+      persister = new Persister(options.package, options.root, options.location);
 
     files = fileAnalyzer.getFiles(this.files);
     prints = fingerprinter.hashFiles(files);

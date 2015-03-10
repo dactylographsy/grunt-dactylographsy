@@ -13,7 +13,7 @@ describe('Persister specification', function() {
   })
 
   beforeEach(function() {
-    persister = new Persister(root, file);
+    persister = new Persister('None', root, file);
   });
 
   it('creates a file as a store', function() {
