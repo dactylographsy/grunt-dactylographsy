@@ -16,7 +16,7 @@ describe('Fingerprinter specification', function() {
     var
       _hashes,
       _file = './test/fixtures/persister.json',
-      _hash = 'e75b028c57c3e4ab82eb6e6d9cbd4052d2a61301';
+      _hash = '6bc61871aef6caed535a487b79e5c76506413ae1';
 
     _hashes = fingerprinter.hashFiles([
       _file

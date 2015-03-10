@@ -8,8 +8,11 @@ function Persister(packageMeta, root, location) {
   this._location = location;
 }
 
-Persister.prototype.write = function(data) {
+Persister.prototype.write = function(hashes) {
+  var data = {};
+
   data.package = this._packageMeta;
+  data.hashes = hashes;
 
   var json = JSON.stringify(data, null, 2);
 

@@ -31,6 +31,6 @@ describe('Persister specification', function() {
 
     var read = persister.read();
 
-    expect(read.foo).to.equal('bar');
+    expect(read.hashes.foo).to.equal('bar');
   });
 });
