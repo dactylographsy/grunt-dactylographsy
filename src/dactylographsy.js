@@ -1,7 +1,7 @@
 /* global window, document, XMLHttpRequest, XDomainRequest */
 
 ;(function(root, window, document, undefined) {
-  "use strict";
+  'use strict';
 
   var
     Dactylographsy,
@@ -10,10 +10,8 @@
     config,
     previousDactylographsy = root.Dactylographsy,
     executingScript = document.getElementById('dactylographsy'),
-    injected = {
-      css: {},
-      js: {}
-    };
+    queue = {},
+    injectionOrder = [];
 
   Dactylographsy = function(obj) {
     // If already instance return
@@ -90,7 +88,7 @@
     xhr.send();
   };
 
-  Dactylographsy.js = function(url, success) {
+  Dactylographsy.js = function(url, manifest, success) {
     // Create script element and set its type
     var
       script = document.createElement('script'),
@@ -117,6 +115,11 @@
       };
     }
 
+    /*script.async = (
+      config.order.indexOf(manifest.package) === -1
+    );*/
+    script.async = false;
+
     // Set the url
     script.src = url;
 
@@ -125,66 +128,78 @@
     return url;
   };
 
-  Dactylographsy.extension = function(filename) {
-    return filename.split('.').pop();
-  };
-
   Dactylographsy.basename = function(path) {
     return path.replace(/.*\/|\.[^.]*$/g, '');
   };
 
-  Dactylographsy.fileNameWithFingerprint = function(dependency, fingerprint) {
+  Dactylographsy.fileNameWithFingerprint = function(dependency, config) {
     var
-      _extension = Dactylographsy.extension(dependency),
-      _filename = Dactylographsy.basename(dependency);
+      _path = (config.files[dependency.file]) ?
+        config.files[dependency.file].path :
+        dependency.path + '/',
+      _prefix = (config.prefix) ?
+        config.prefix : '';
 
     return (
-      _filename +
+      _prefix +
+      _path +
+      Dactylographsy.basename(dependency.file) +
       '-' +
-      fingerprint +
-      '.' +
-      _extension
+      dependency.hash +
+      dependency.extension
     );
   };
 
-  Dactylographsy.fileNameWithoutFingerprint = function(dependency) {
+  Dactylographsy.fileNameWithoutFingerprint = function(dependency, config) {
     var
-      _extension = Dactylographsy.extension(dependency),
-      _filename = Dactylographsy.basename(dependency);
+      _path = (config.files[dependency.file]) ?
+        config.files[dependency.file].path :
+        dependency.path + '/',
+      _prefix = (config.prefix) ?
+        config.prefix : '';
 
     return (
-      _filename +
-      '.' +
-      _extension
+      _prefix +
+      _path +
+      dependency.file
     );
   };
 
   Dactylographsy.injectManifest = function(manifest) {
     var
-      _dependencies = Object.keys(manifest);
+      _hashes = Object.keys(manifest.hashes);
 
-    for (var i = 0, len = _dependencies.length; i < len; i++) {
+    for (var i = 0, len = _hashes.length; i < len; i++) {
       var
-        _dependency = _dependencies[i],
-        _fingerprint = manifest[_dependency],
-        _extension = Dactylographsy.extension(_dependency);
+        _hash = _hashes[i],
+        _dependency = manifest.hashes[_hash];
 
-      switch (_extension) {
-        case 'css':
+      switch (_dependency.extension) {
+        case '.css':
           Dactylographsy.css(
             (config.fingerprint) ?
-              Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint) :
-              Dactylographsy.fileNameWithoutFingerprint(_dependency)
+              Dactylographsy.fileNameWithFingerprint(_dependency, config.manifests[manifest.package]) :
+              Dactylographsy.fileNameWithoutFingerprint(_dependency, config.manifests[manifest.package]),
+            manifest
           );
           break;
-        case 'js':
+        case '.js':
           Dactylographsy.js(
             (config.fingerprint) ?
-              Dactylographsy.fileNameWithFingerprint(_dependency, _fingerprint) :
-              Dactylographsy.fileNameWithoutFingerprint(_dependency)
+              Dactylographsy.fileNameWithFingerprint(_dependency, config.manifests[manifest.package]) :
+              Dactylographsy.fileNameWithoutFingerprint(_dependency, config.manifests[manifest.package]),
+            manifest
           );
           break;
       }
+    }
+
+    Dactylographsy.remove(injectionOrder, manifest.package);
+  };
+
+  Dactylographsy.remove = function(array, key) {
+    while (array.indexOf(key) !== -1) {
+      array.splice(array.indexOf(key), 1);
     }
   };
 
@@ -203,12 +218,39 @@
 
   initialize = function() {
     var
+      shouldInject = function(manifest) {
+        if (injectionOrder.length === 0 || injectionOrder.indexOf(manifest.package) === 0) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      injectFromQueue = function() {
+        var
+          _nextManifest;
+
+        if (injectionOrder[0] && queue[injectionOrder[0]]) {
+          _nextManifest = queue[injectionOrder[0]];
+        } else {
+          _nextManifest = queue[0];
+        }
+        if (_nextManifest) {
+          Dactylographsy.injectManifest(_nextManifest);
+          injectFromQueue();
+        }
+      },
       injectManifest = function(xhr, response) {
-        Dactylographsy.injectManifest(JSON.parse(response));
+        var
+          _manifest = JSON.parse(response);
+
+        queue[_manifest.package] = _manifest;
+
+        injectFromQueue();
       };
 
     manifests = Dactylographsy.readAttrOnScript('manifests');
     config = Dactylographsy.readAttrOnScript('config');
+    injectionOrder = config.order;
 
     for (var i = 0, len = manifests.length; i < len; i++) {
       Dactylographsy.ajaxGet(manifests[i], injectManifest);
