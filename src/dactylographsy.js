@@ -10,6 +10,7 @@
     config,
     previousDactylographsy = root.Dactylographsy,
     executingScript = document.getElementById('dactylographsy'),
+    injectInto = document.body || document.head || document.getElementsByTagName('script')[0],
     queue = {},
     injectionOrder = [];
 
@@ -41,11 +42,7 @@
     var
       _attr = executingScript.getAttribute('data-' + attr);
 
-    if (_attr) {
-      return JSON.parse(_attr);
-    } else {
-      return undefined;
-    }
+    return _attr ? JSON.parse(_attr) : undefined;
   };
 
   Dactylographsy.ajaxGet = function(url, success, error, options) {
@@ -88,11 +85,10 @@
     xhr.send();
   };
 
-  Dactylographsy.js = function(url, manifest, success) {
+  Dactylographsy.js = function(url, success) {
     // Create script element and set its type
     var
-      script = document.createElement('script'),
-      injectInto = document.body || document.head || document.getElementsByTagName('script')[0];
+      script = document.createElement('script');
 
     script.type = 'text/javascript';
 
@@ -115,9 +111,6 @@
       };
     }
 
-    /*script.async = (
-      config.order.indexOf(manifest.package) === -1
-    );*/
     script.async = false;
 
     // Set the url
@@ -132,7 +125,7 @@
     return path.replace(/.*\/|\.[^.]*$/g, '');
   };
 
-  Dactylographsy.fileNameWithFingerprint = function(dependency, config) {
+  Dactylographsy.fileName = function(dependency, config) {
     var
       _path = (config.files[dependency.file]) ?
         config.files[dependency.file].path :
@@ -140,58 +133,61 @@
       _prefix = (config.prefix) ?
         config.prefix : '';
 
-    return (
+    return (config.fingerprint) ? (
       _prefix +
       _path +
       Dactylographsy.basename(dependency.file) +
       '-' +
       dependency.hash +
       dependency.extension
-    );
-  };
-
-  Dactylographsy.fileNameWithoutFingerprint = function(dependency, config) {
-    var
-      _path = (config.files[dependency.file]) ?
-        config.files[dependency.file].path :
-        dependency.path + '/',
-      _prefix = (config.prefix) ?
-        config.prefix : '';
-
-    return (
+    ) : (
       _prefix +
       _path +
       dependency.file
     );
   };
 
+  Dactylographsy.removeInjectedFile = function(manifest, dependency) {
+    delete config.manifests[manifest.package].files[dependency.file];
+  };
+
+  Dactylographsy.injectDependency = function(dependency, manifestConfig) {
+    switch (dependency.extension) {
+      case '.css':
+        Dactylographsy.css(
+          Dactylographsy.fileName(dependency, manifestConfig)
+        );
+        break;
+      case '.js':
+        Dactylographsy.js(
+          Dactylographsy.fileName(dependency, manifestConfig)
+        );
+        break;
+    }
+  };
+
   Dactylographsy.injectManifest = function(manifest) {
     var
-      _hashes = Object.keys(manifest.hashes);
+      _hashes = Object.keys(manifest.hashes),
+      _manifestConfig = config.manifests[manifest.package];
 
     for (var i = 0, len = _hashes.length; i < len; i++) {
       var
         _hash = _hashes[i],
         _dependency = manifest.hashes[_hash];
 
-      switch (_dependency.extension) {
-        case '.css':
-          Dactylographsy.css(
-            (config.fingerprint) ?
-              Dactylographsy.fileNameWithFingerprint(_dependency, config.manifests[manifest.package]) :
-              Dactylographsy.fileNameWithoutFingerprint(_dependency, config.manifests[manifest.package]),
-            manifest
-          );
-          break;
-        case '.js':
-          Dactylographsy.js(
-            (config.fingerprint) ?
-              Dactylographsy.fileNameWithFingerprint(_dependency, config.manifests[manifest.package]) :
-              Dactylographsy.fileNameWithoutFingerprint(_dependency, config.manifests[manifest.package]),
-            manifest
-          );
-          break;
-      }
+      Dactylographsy.injectDependency(_dependency, _manifestConfig);
+      Dactylographsy.removeInjectedFile(manifest, _dependency);
+    }
+
+    var
+      _uninjectedFiles = Object.keys(_manifestConfig.files);
+
+    for (var i = 0, len = _uninjectedFiles.length; i < len; i++) {
+      var
+        _fileName = _uninjectedFiles[i];
+
+      Dactylographsy.injectDependency(_manifestConfig.files[_fileName], _manifestConfig);
     }
 
     Dactylographsy.remove(injectionOrder, manifest.package);
@@ -205,8 +201,7 @@
 
   Dactylographsy.css = function(url) {
     var
-      link = document.createElement('link'),
-      injectInto = document.body || document.head || document.getElementsByTagName('script')[0];
+      link = document.createElement('link');
 
     link.type = 'text/css';
     link.rel = 'stylesheet';
@@ -229,7 +224,7 @@
         var
           _nextManifest;
 
-        if (injectionOrder[0] && queue[injectionOrder[0]]) {
+        if (injectionOrder.length > 0 && queue[injectionOrder[0]]) {
           _nextManifest = queue[injectionOrder[0]];
         } else {
           _nextManifest = queue[0];
