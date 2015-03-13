@@ -22,8 +22,6 @@ describe('Fingerprinter specification', function() {
       _file
     ]);
 
-    console.log(_hashes)
-
     expect(_hashes[_hash].hash).to.equal(_hash);
     expect(_hashes[_hash].extension).to.equal('.json');
     expect(_hashes[_hash].file).to.equal('persister.json');
