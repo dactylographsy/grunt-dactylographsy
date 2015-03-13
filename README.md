@@ -33,7 +33,14 @@ Or add it to an existing task: `grunt.registerTask('test', ['clean', 'dactylogra
 
 ### Options
 
-TBD
+```js
+// Location of manifest file containing file information with hashes
+location: 'dactylographsy.json'
+// Root impacting location
+root: 'dist'
+// Additional meta information for manifest (JSON stringified)
+package: 'None'
+```
 
 An example configuration can be found [here](https://github.com/tdeekens/grunt-dactylographsy/blob/master/grunt/tasks/dactylographsy.js) and if you want to check the options you might want to check the [Gruntfile](https://github.com/tdeekens/grunt-dactylographsy/blob/master/tasks/dactylographsy.js#L22) itself.
 
