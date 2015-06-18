@@ -1,6 +1,6 @@
 # grunt-dactylographsy
 
-> Grunt task for gathering the file sizes of different asset types over time.
+> Grunt task for fetching and injecting fingerprinted assets from multiple manifest files with general caching.
 
 [![NPM](https://nodei.co/npm/grunt-dactylographsy.png?mini=true)](https://nodei.co/npm/grunt-dactylographsy/)
 

@@ -52,11 +52,19 @@ class Cache {
     this.options = options;
   }
 
-  get(key) {
+  get(key, defaultValue) {
     return new Promise((resolve, reject) => {
       let _item = JSON.parse(
         localStorage.getItem(key)
       );
+
+      if (_item === null && defaultValue !== undefined) {
+        this.set(defaultValue, 'plain', key);
+
+        resolve(defaultValue);
+
+        return;
+      }
 
       if (_item) {
         console.info(`Found item with key: ${key} in cache.`);
@@ -86,6 +94,10 @@ class Cache {
       url,
       JSON.stringify(cached)
     );
+  }
+
+  flush() {
+    localStorage.clear();
   }
 }
 
@@ -150,7 +162,7 @@ class Js {
       return new Ajax()
         .get(url)
         .then(response => {
-          let { text : responseText } = response;
+          let { text: responseText } = response;
 
           this.cache.set(responseText, 'js', url);
 
@@ -183,7 +195,7 @@ class Css {
       return new Ajax()
         .get(url)
         .then(response => {
-          let { text : responseText } = response;
+          let { text: responseText } = response;
 
           this.cache.set(responseText, 'css', url);
 
@@ -247,8 +259,8 @@ class Manifest {
       .get(this.url)
       .then(response => {
         let {
-          text : responseText,
-          url : responseUrl
+          text: responseText,
+          url: responseUrl
         } = response;
 
         console.info(`Fetched manifest from url: ${responseUrl}.`);
@@ -378,6 +390,19 @@ class Dactylographsy {
   }
 
   run() {
+    if (this.config.ttl) {
+      this.cache.get('clt', 0)
+        .then(clt => {
+          if (clt >= this.config.ttl) {
+            console.info(`Flushing cache due to exeeding TTL of ${this.config.ttl}.`);
+
+            this.cache.flush();
+          } else {
+            this.cache.set(++clt, 'plain', 'clt');
+          }
+        });
+    }
+
     return this.restore()
       .then(injectedFromCache => {
         return this.refresh(injectedFromCache);

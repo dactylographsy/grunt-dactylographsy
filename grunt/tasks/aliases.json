@@ -5,6 +5,7 @@
     "uglify"
   ],
   "test": [
+    "eslint",
     "mochacov:html",
     "mochacov:spec"
   ],

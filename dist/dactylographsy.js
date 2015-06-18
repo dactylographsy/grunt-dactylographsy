@@ -71,9 +71,19 @@ var Cache = (function () {
 
   _createClass(Cache, [{
     key: 'get',
-    value: function get(key) {
+    value: function get(key, defaultValue) {
+      var _this = this;
+
       return new Promise(function (resolve, reject) {
         var _item = JSON.parse(localStorage.getItem(key));
+
+        if (_item === null && defaultValue !== undefined) {
+          _this.set(defaultValue, 'plain', key);
+
+          resolve(defaultValue);
+
+          return;
+        }
 
         if (_item) {
           console.info('Found item with key: ' + key + ' in cache.');
@@ -103,6 +113,11 @@ var Cache = (function () {
 
       localStorage.setItem(url, JSON.stringify(cached));
     }
+  }, {
+    key: 'flush',
+    value: function flush() {
+      localStorage.clear();
+    }
   }]);
 
   return Cache;
@@ -119,7 +134,7 @@ var Js = (function () {
   _createClass(Js, [{
     key: 'injectWithText',
     value: function injectWithText(text) {
-      var _this = this;
+      var _this2 = this;
 
       return new Promise(function (resolve) {
         var script = document.createElement('script');
@@ -128,8 +143,8 @@ var Js = (function () {
 
         script.text = text;
 
-        if (_this.injectInto) {
-          _this.injectInto.appendChild(script);
+        if (_this2.injectInto) {
+          _this2.injectInto.appendChild(script);
         }
 
         resolve(script);
@@ -138,7 +153,7 @@ var Js = (function () {
   }, {
     key: 'injectWithUrl',
     value: function injectWithUrl(url) {
-      var _this2 = this;
+      var _this3 = this;
 
       return new Promise(function (resolve) {
         // Create script element and set its type
@@ -154,21 +169,21 @@ var Js = (function () {
             if (script.readyState === 'loaded' || script.readyState === 'complete') {
               script.onreadystatechange = null;
 
-              _this2.cache(url);
+              _this3.cache(url);
             }
           };
         } else {
           // Bind `onload` callback on script element
           script.onload = function () {
-            _this2.ensureCache(url);
+            _this3.ensureCache(url);
           };
         }
 
         // Set the url
         script.src = url;
 
-        if (_this2.injectInto) {
-          _this2.injectInto.appendChild(script);
+        if (_this3.injectInto) {
+          _this3.injectInto.appendChild(script);
         }
 
         resolve(script);
@@ -177,17 +192,17 @@ var Js = (function () {
   }, {
     key: 'ensureCache',
     value: function ensureCache(url) {
-      var _this3 = this;
+      var _this4 = this;
 
       return new Promise(function (resolve) {
-        if (_this3.cache.has(url)) {
+        if (_this4.cache.has(url)) {
           resolve();
         }
 
         return new Ajax().get(url).then(function (response) {
           var responseText = response.text;
 
-          _this3.cache.set(responseText, 'js', url);
+          _this4.cache.set(responseText, 'js', url);
 
           resolve();
         });
@@ -196,12 +211,12 @@ var Js = (function () {
   }, {
     key: 'inject',
     value: function inject(url) {
-      var _this4 = this;
+      var _this5 = this;
 
       return this.cache.get(url).then(function (text) {
-        return _this4.injectWithText(text);
+        return _this5.injectWithText(text);
       })['catch'](function () {
-        return _this4.injectWithUrl(url);
+        return _this5.injectWithUrl(url);
       });
     }
   }]);
@@ -220,17 +235,17 @@ var Css = (function () {
   _createClass(Css, [{
     key: 'ensureCache',
     value: function ensureCache(url) {
-      var _this5 = this;
+      var _this6 = this;
 
       return new Promise(function (resolve) {
-        if (_this5.cache.has(url)) {
+        if (_this6.cache.has(url)) {
           resolve();
         }
 
         return new Ajax().get(url).then(function (response) {
           var responseText = response.text;
 
-          _this5.cache.set(responseText, 'css', url);
+          _this6.cache.set(responseText, 'css', url);
 
           resolve();
         });
@@ -239,7 +254,7 @@ var Css = (function () {
   }, {
     key: 'injectWithUrl',
     value: function injectWithUrl(url) {
-      var _this6 = this;
+      var _this7 = this;
 
       return new Promise(function (resolve) {
         var link = document.createElement('link');
@@ -251,11 +266,11 @@ var Css = (function () {
 
         link.href = url;
 
-        if (_this6.injectInto) {
-          _this6.injectInto.appendChild(link);
+        if (_this7.injectInto) {
+          _this7.injectInto.appendChild(link);
         }
 
-        _this6.ensureCache(url);
+        _this7.ensureCache(url);
 
         resolve(link);
       });
@@ -263,7 +278,7 @@ var Css = (function () {
   }, {
     key: 'injectWithText',
     value: function injectWithText(text) {
-      var _this7 = this;
+      var _this8 = this;
 
       return new Promise(function (resolve) {
         var style = document.createElement('link');
@@ -272,8 +287,8 @@ var Css = (function () {
 
         style.textContent = text;
 
-        if (_this7.injectInto) {
-          _this7.injectInto.appendChild(style);
+        if (_this8.injectInto) {
+          _this8.injectInto.appendChild(style);
         }
 
         resolve(style);
@@ -282,12 +297,12 @@ var Css = (function () {
   }, {
     key: 'inject',
     value: function inject(url) {
-      var _this8 = this;
+      var _this9 = this;
 
       return this.cache.get(url).then(function (text) {
-        return _this8.injectWithText(text);
+        return _this9.injectWithText(text);
       })['catch'](function () {
-        return _this8.injectWithUrl(url);
+        return _this9.injectWithUrl(url);
       });
     }
   }]);
@@ -324,7 +339,7 @@ var Manifest = (function () {
 
 var Injector = (function () {
   function Injector(injectInto, manifests) {
-    var _this9 = this;
+    var _this10 = this;
 
     var options = arguments[2] === undefined ? {} : arguments[2];
 
@@ -334,7 +349,7 @@ var Injector = (function () {
     this.injectInto = injectInto;
 
     manifests.forEach(function (manifest) {
-      _this9.manifests[manifest['package']] = manifest;
+      _this10.manifests[manifest['package']] = manifest;
     });
 
     this.prefix = options.prefix || '';
@@ -344,27 +359,27 @@ var Injector = (function () {
   _createClass(Injector, [{
     key: 'inject',
     value: function inject() {
-      var _this10 = this;
+      var _this11 = this;
 
       this.order.map(function (_package) {
-        if (!_this10.manifests[_package]) {
+        if (!_this11.manifests[_package]) {
           console.error('Couldn\'t find package ' + _package + ' from injection order.');
         } else {
-          _this10.injectManifest(_this10.manifests[_package]);
+          _this11.injectManifest(_this11.manifests[_package]);
         }
       });
     }
   }, {
     key: 'injectManifest',
     value: function injectManifest(manifest) {
-      var _this11 = this;
+      var _this12 = this;
 
       var hashes = Object.keys(manifest.hashes);
 
       return hashes.map(function (hash) {
         var dependency = manifest.hashes[hash];
 
-        _this11.injectDependency(dependency, manifest.rootUrl || manifest['package']);
+        _this12.injectDependency(dependency, manifest.rootUrl || manifest['package']);
 
         return hash;
       });
@@ -429,7 +444,7 @@ var Dactylographsy = (function () {
   }, {
     key: 'refresh',
     value: function refresh() {
-      var _this12 = this;
+      var _this13 = this;
 
       var inject = arguments[0] === undefined ? true : arguments[0];
 
@@ -438,20 +453,20 @@ var Dactylographsy = (function () {
       })).then(function (manifests) {
         console.info('Fetched all manifests, ' + manifests.length + ' in total.');
 
-        _this12.cache.set(manifests, 'manifests', 'manifests');
+        _this13.cache.set(manifests, 'manifests', 'manifests');
 
-        return new Injector(inject ? _this12.injectInto : undefined, manifests, _this12.config).inject();
+        return new Injector(inject ? _this13.injectInto : undefined, manifests, _this13.config).inject();
       });
     }
   }, {
     key: 'restore',
     value: function restore() {
-      var _this13 = this;
+      var _this14 = this;
 
       return this.cache.get('manifests').then(function (manifests) {
         console.info('Resotring with manifests in cache later refreshing via network.');
 
-        new Injector(_this13.injectInto, manifests, _this13.config).inject();
+        new Injector(_this14.injectInto, manifests, _this14.config).inject();
 
         return false;
       })['catch'](function () {
@@ -468,10 +483,22 @@ var Dactylographsy = (function () {
   }, {
     key: 'run',
     value: function run() {
-      var _this14 = this;
+      var _this15 = this;
+
+      if (this.config.ttl) {
+        this.cache.get('clt', 0).then(function (clt) {
+          if (clt >= _this15.config.ttl) {
+            console.info('Flushing cache due to exeeding TTL of ' + _this15.config.ttl + '.');
+
+            _this15.cache.flush();
+          } else {
+            _this15.cache.set(++clt, 'plain', 'clt');
+          }
+        });
+      }
 
       return this.restore().then(function (injectedFromCache) {
-        return _this14.refresh(injectedFromCache);
+        return _this15.refresh(injectedFromCache);
       });
     }
   }]);
