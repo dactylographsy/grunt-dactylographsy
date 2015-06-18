@@ -1,11 +1,13 @@
 module.exports = {
   js: {
     src: [
-      '<%= paths.src.js %>**/*.js'
+      'node_modules/babel-core/browser-polyfill.js',
+      '<%= paths.dist.js %>dactylographsy.js'
     ],
     dest: '<%= paths.dist.js %>/dactylographsy.min.js'
   },
   options: {
+    sourceMap: false,
     mangle: true,
     beautify: false
   }

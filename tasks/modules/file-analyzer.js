@@ -1,9 +1,6 @@
-'use strict';
-
 var
   fs = require('fs'),
-  path = require('path'),
-  _ = require('lodash');
+  path = require('path');
 
 function FileAnalyzer(root) {
   this.root = root;

@@ -1,6 +1,5 @@
-'use strict';
-
-var fs = require('fs');
+var
+  fs = require('fs');
 
 function Persister(packageMeta, root, location) {
   this._packageMeta = packageMeta;

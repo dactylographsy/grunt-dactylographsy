@@ -1,0 +1,26 @@
+{
+  "parser": "babel-eslint",
+
+  "env": {
+    "browser": false
+  },
+
+  "globals": {
+    "require": 1,
+    "module": 1,
+    "window": 1,
+    "console": 1,
+    "document": 1,
+    "localStorage": 1,
+    "XMLHttpRequest": 1,
+    "XDomainRequest": 1
+  },
+
+  "rules": {
+    "quotes": [2, "single"],
+    "eqeqeq": 0,
+    "strict": 0,
+    "no-underscore-dangle": 0,
+    "no-console": 0
+  }
+}

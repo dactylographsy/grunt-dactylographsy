@@ -6,16 +6,12 @@
 * Licensed under the MIT license.
 */
 
-'use strict';
-
-var
-  fs = require('fs'),
-  _ = require('lodash'),
-  Persister = require('./modules/persister'),
-  Fingerprinter = require('./modules/fingerprinter'),
-  FileAnalyzer = require('./modules/file-analyzer');
-
 module.exports = function(grunt) {
+  var
+    Persister = require('./modules/persister'),
+    Fingerprinter = require('./modules/fingerprinter'),
+    FileAnalyzer = require('./modules/file-analyzer');
+
   grunt.registerMultiTask('dactylographsy', 'Fingerprint your assets', function() {
     var
       options = this.options({

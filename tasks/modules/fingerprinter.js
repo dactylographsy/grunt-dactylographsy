@@ -1,7 +1,4 @@
-'use strict';
-
 var
-  _ = require('lodash'),
   path = require('path'),
   fs = require('fs'),
   crypto = require('crypto'),

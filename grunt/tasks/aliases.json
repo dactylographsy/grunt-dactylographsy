@@ -1,10 +1,10 @@
 {
   "default": [
     "test",
+    "babel",
     "uglify"
   ],
   "test": [
-    "jshint",
     "mochacov:html",
     "mochacov:spec"
   ],
@@ -13,6 +13,7 @@
     "mochacov:ci"
   ],
   "dev": [
-    "dactylographsy"
+    "default",
+    "watch:dev"
   ]
 }
