@@ -38,6 +38,8 @@ Or add it to an existing task: `grunt.registerTask('test', ['clean', 'dactylogra
 location: 'dactylographsy.json'
 // Root impacting location
 root: 'dist'
+// The project's root url: written into manifest, consumed by client-side script
+rootUrl: ''
 // Additional meta information for manifest (JSON stringified)
 package: 'None'
 ```
