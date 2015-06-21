@@ -1,0 +1,18 @@
+{
+  "package": "vertical-3",
+  "rootUrl": "vertical-3",
+  "hashes": {
+    "hash7": {
+      "hash": "hash7",
+      "file": "1.js",
+      "path": "example",
+      "extension": ".js"
+    },
+    "hash8": {
+      "hash": "hash8",
+      "file": "1.css",
+      "path": "example",
+      "extension": ".css"
+    }
+  }
+}
