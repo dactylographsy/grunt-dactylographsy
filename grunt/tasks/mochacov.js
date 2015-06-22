@@ -18,6 +18,9 @@ module.exports = {
     }
   },
   options: {
-    files: 'test/**/*.js'
+    files: 'test/**/*.js',
+    compilers: [
+      'js:babel/register'
+    ]
   }
 };

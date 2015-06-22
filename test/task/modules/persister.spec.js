@@ -1,11 +1,11 @@
 var expect = require('chai').expect,
     fs = require('fs');
 
-var Persister = require('../../tasks/modules/persister'),
+var Persister = require('../../../tasks/modules/persister'),
     persister;
 
 var
-  root = './test/fixtures',
+  root = './test/task/fixtures',
   rootUrl = 'singularity',
   file = 'persister.json';
 
