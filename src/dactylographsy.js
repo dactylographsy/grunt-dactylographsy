@@ -336,7 +336,7 @@ class Injector {
   }
 }
 
-class Dactylographsy {
+export default class Dactylographsy {
   constructor(options) {
     let { autorun = false } = options;
 
@@ -410,6 +410,8 @@ class Dactylographsy {
   }
 }
 
-window.dactylographsy = new Dactylographsy({
-  autorun: true
-});
+if (typeof window !== 'undefined') {
+  window.dactylographsy = new Dactylographsy({
+    autorun: true
+  });
+}
