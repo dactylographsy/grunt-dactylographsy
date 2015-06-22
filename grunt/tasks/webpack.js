@@ -4,7 +4,7 @@ module.exports = {
     target: 'web',
     debug: true,
     devtool: 'source-map',
-    entry: './src/dactylographsy.js',
+    entry: './src/index.js',
     output: {
       path: './dist/',
       filename: 'dactylographsy.js',

@@ -3,12 +3,12 @@ var expect = require('chai').expect,
     FileAnalyzer = require('../../../tasks/modules/file-analyzer'),
     fileAnalyzer;
 
-describe('FileAnalyzer specification', function() {
-  beforeEach(function() {
+describe('FileAnalyzer specification', () => {
+  beforeEach(() => {
     fileAnalyzer = new FileAnalyzer();
   });
 
-  it('returns files and omits directories', function() {
+  it('returns files and omits directories', () => {
     var glob = [{
       src: ['./test/task/fixtures']
     }];

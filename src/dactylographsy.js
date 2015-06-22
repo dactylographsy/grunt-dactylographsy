@@ -2,7 +2,7 @@ import Cache from './cache';
 import Injector, {Manifest} from './injector';
 
 export default class Dactylographsy {
-  constructor(options) {
+  constructor(options = {}) {
     let { autorun = false } = options;
 
     this.hookIntoDom();
@@ -13,6 +13,8 @@ export default class Dactylographsy {
   }
 
   hookIntoDom() {
+    if (typeof document === 'undefined') { return; }
+
     this.executingScript = document.getElementById('dactylographsy');
     this.injectInto = document.body || document.head || document.getElementsByTagName('script')[0];
   }
@@ -49,6 +51,8 @@ export default class Dactylographsy {
   }
 
   readAttrOnScript(attr) {
+    if (!this.executingScript) { return false; }
+
     let _attr = this.executingScript.getAttribute('data-' + attr);
 
     return _attr ? JSON.parse(_attr) : undefined;
@@ -73,11 +77,4 @@ export default class Dactylographsy {
         return this.refresh(injectedFromCache);
       });
   }
-}
-
-// TODO: Refactor into browser bundle or sth
-if (typeof window !== 'undefined') {
-  window.dactylographsy = new Dactylographsy({
-    autorun: true
-  });
 }

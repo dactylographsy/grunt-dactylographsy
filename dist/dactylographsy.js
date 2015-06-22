@@ -46,6 +46,26 @@
 
 	'use strict';
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
+	var _dactylographsy = __webpack_require__(1);
+	
+	var _dactylographsy2 = _interopRequireDefault(_dactylographsy);
+	
+	if (typeof window !== 'undefined') {
+	  window.dactylographsy = new _dactylographsy2['default']({
+	    autorun: true
+	  });
+	}
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -70,16 +90,18 @@
 	  }
 	}
 	
-	var _cache = __webpack_require__(1);
+	var _cache = __webpack_require__(2);
 	
 	var _cache2 = _interopRequireDefault(_cache);
 	
-	var _injector = __webpack_require__(2);
+	var _injector = __webpack_require__(3);
 	
 	var _injector2 = _interopRequireDefault(_injector);
 	
 	var Dactylographsy = (function () {
-	  function Dactylographsy(options) {
+	  function Dactylographsy() {
+	    var options = arguments[0] === undefined ? {} : arguments[0];
+	
 	    _classCallCheck(this, Dactylographsy);
 	
 	    var _options$autorun = options.autorun;
@@ -97,6 +119,10 @@
 	  _createClass(Dactylographsy, [{
 	    key: 'hookIntoDom',
 	    value: function hookIntoDom() {
+	      if (typeof document === 'undefined') {
+	        return;
+	      }
+	
 	      this.executingScript = document.getElementById('dactylographsy');
 	      this.injectInto = document.body || document.head || document.getElementsByTagName('script')[0];
 	    }
@@ -141,6 +167,10 @@
 	  }, {
 	    key: 'readAttrOnScript',
 	    value: function readAttrOnScript(attr) {
+	      if (!this.executingScript) {
+	        return false;
+	      }
+	
 	      var _attr = this.executingScript.getAttribute('data-' + attr);
 	
 	      return _attr ? JSON.parse(_attr) : undefined;
@@ -172,17 +202,10 @@
 	})();
 	
 	exports['default'] = Dactylographsy;
-	
-	// TODO: Refactor into browser bundle or sth
-	if (typeof window !== 'undefined') {
-	  window.dactylographsy = new Dactylographsy({
-	    autorun: true
-	  });
-	}
 	module.exports = exports['default'];
 
 /***/ },
-/* 1 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -274,7 +297,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -303,13 +326,13 @@
 	  }
 	}
 	
-	var _dom = __webpack_require__(3);
+	var _dom = __webpack_require__(4);
 	
-	var _ajax = __webpack_require__(4);
+	var _ajax = __webpack_require__(5);
 	
 	var _ajax2 = _interopRequireDefault(_ajax);
 	
-	var _cache = __webpack_require__(1);
+	var _cache = __webpack_require__(2);
 	
 	var _cache2 = _interopRequireDefault(_cache);
 	
@@ -421,7 +444,7 @@
 	exports['default'] = Injector;
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -450,11 +473,11 @@
 	  }
 	}
 	
-	var _cache = __webpack_require__(1);
+	var _cache = __webpack_require__(2);
 	
 	var _cache2 = _interopRequireDefault(_cache);
 	
-	var _ajax = __webpack_require__(4);
+	var _ajax = __webpack_require__(5);
 	
 	var _ajax2 = _interopRequireDefault(_ajax);
 	
@@ -650,7 +673,7 @@
 	exports.Css = Css;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';

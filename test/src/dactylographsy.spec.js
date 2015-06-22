@@ -8,5 +8,6 @@ describe('Dactylographsy specification', function() {
   });
 
   it('returns files and omits directories', function() {
+    console.log(new Dactylographsy())
   });
 });

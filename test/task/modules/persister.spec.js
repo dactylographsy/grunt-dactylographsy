@@ -9,21 +9,21 @@ var
   rootUrl = 'singularity',
   file = 'persister.json';
 
-describe('Persister specification', function() {
-  before(function() {
+describe('Persister specification', () => {
+  before(() => {
   })
 
-  beforeEach(function() {
+  beforeEach(() => {
     persister = new Persister('None', root, file, rootUrl);
   });
 
-  it('creates a file as a store', function() {
+  it('creates a file as a store', () => {
     var written = JSON.parse(persister.write({}));
 
     expect(written).to.be.an.object;
   });
 
-  it('reads from a file as a store', function() {
+  it('reads from a file as a store', () => {
     var written = JSON.parse(persister.write({
       foo: 'bar'
     }));
@@ -35,7 +35,7 @@ describe('Persister specification', function() {
     expect(read.hashes.foo).to.equal('bar');
   });
 
-  it('writes the rootUrl to the manifest', function() {
+  it('writes the rootUrl to the manifest', () => {
     var written = JSON.parse(persister.write({
       foo: 'bar'
     }));
