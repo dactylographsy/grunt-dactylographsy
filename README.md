@@ -51,4 +51,6 @@ An example configuration can be found [here](https://github.com/tdeekens/grunt-d
 Developing on the task alone is fairly easy just `git clone https://github.com/tdeekens/grunt-dactylographsy.git` then `cd grunt-dactylographsy`. From there one has to link the package to itself via `npm link && npm link grunt-dactylographsy` which will allow for calling `grunt dev`. Now just work the `task/dactylographsy.js` and check results - feel free to submit a pull-request!
 
 ## Release History
+
 - 0.0.0 Development, do not use!
+- 1.0.0 Initial release with grunt-task and client-side script
