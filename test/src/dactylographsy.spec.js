@@ -6,8 +6,4 @@ var
 describe('Dactylographsy specification', function() {
   beforeEach(function() {
   });
-
-  it('returns files and omits directories', function() {
-    console.log(new Dactylographsy())
-  });
 });
