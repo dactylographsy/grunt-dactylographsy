@@ -237,6 +237,8 @@
 	    _classCallCheck(this, Cache);
 	
 	    this.options = options;
+	
+	    this.cachePrefix = this.options.cachePrefix || '__dactylographsy__';
 	  }
 	
 	  _createClass(Cache, [{
@@ -245,7 +247,7 @@
 	      var _this = this;
 	
 	      return new Promise(function (resolve, reject) {
-	        var _item = JSON.parse(localStorage.getItem(key));
+	        var _item = JSON.parse(localStorage.getItem('' + _this.cachePrefix + '-' + key));
 	
 	        if (_item === null && defaultValue !== undefined) {
 	          _this.set(defaultValue, 'plain', key);
@@ -281,12 +283,18 @@
 	        type: type
 	      };
 	
-	      localStorage.setItem(url, JSON.stringify(cached));
+	      localStorage.setItem('' + this.cachePrefix + '-' + url, JSON.stringify(cached));
 	    }
 	  }, {
 	    key: 'flush',
 	    value: function flush() {
-	      localStorage.clear();
+	      for (var key in localStorage) {
+	        if (key.indexOf(this.cachePrefix) >= 0) {
+	          console.log('Removing item ' + key + ' requested by flush.');
+	
+	          localStorage.removeItem(key);
+	        }
+	      }
 	    }
 	  }]);
 	

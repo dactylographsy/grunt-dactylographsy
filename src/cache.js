@@ -1,12 +1,14 @@
 export default class Cache {
   constructor(options = {}) {
     this.options = options;
+
+    this.cachePrefix = this.options.cachePrefix || '__dactylographsy__';
   }
 
   get(key, defaultValue) {
     return new Promise((resolve, reject) => {
       let _item = JSON.parse(
-        localStorage.getItem(key)
+        localStorage.getItem(`${this.cachePrefix}-${key}`)
       );
 
       if (_item === null && defaultValue !== undefined) {
@@ -42,12 +44,18 @@ export default class Cache {
     };
 
     localStorage.setItem(
-      url,
+      `${this.cachePrefix}-${url}`,
       JSON.stringify(cached)
     );
   }
 
   flush() {
-    localStorage.clear();
+    for (let key in localStorage) {
+      if (key.indexOf(this.cachePrefix) >= 0) {
+        console.log(`Removing item ${key} requested by flush.`);
+
+        localStorage.removeItem(key);
+      }
+    }
   }
 }
