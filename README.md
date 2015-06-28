@@ -8,6 +8,18 @@
 [![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy)
 [![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
 
+## The Idea & Concepts
+
+Complex web applications usually consist of various assets being served from one or multiple hosts. This slows down the user experience while normal browser caching usually is not able to tackle all load retardations.
+
+Imagine JavaScript und CSS files are cached at the client in localstorage by there fingerprints and the application loads instantly while new versions are automatically swapped (cache invalidation) while the application is running. Resulting in an updated application after a refresh.
+
+With dactylographsy every unit of an application can create a custom manifest listing all assets it consists of. These assets will be injected into the page while their contents will be cached once they are once loaded. Once the cache is filled it serves all files on any subsequent page load to speed up the initial load time. As mentioned, the caches might be invalidated at runtime by making a comparison between old and eventually new manifest(s).
+
+[![Architecture Overview](https://github.com/tdeekens/grunt-dactylographsy/blob/master/docs/overview.png)](https://github.com/tdeekens/grunt-docs/blob/master/architecture/overview.png)
+
+A running example can be found [here](https://github.com/tdeekens/grunt-dactylographsy/blob/master/example).
+
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
 
