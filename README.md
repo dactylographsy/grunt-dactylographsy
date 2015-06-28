@@ -10,11 +10,11 @@
 
 ## The Idea & Concepts
 
-Complex web applications usually consist of various assets being served from one or multiple hosts. This slows down the user experience while normal browser caching usually is not able to tackle all load retardations.
+Complex web applications usually consist of various assets being served from one or multiple hosts. This slows down the user experience while normal browser caching usually is not able to tackle all the resulting load retardations.
 
-Imagine JavaScript und CSS files are cached at the client in localstorage by there fingerprints and the application loads instantly while new versions are automatically swapped (cache invalidation) while the application is running. Resulting in an updated application after a refresh.
+Imagine JavaScript und CSS files being cached in the client via localstorage by their fingerprints making the application load instantly while new versions are automatically swapped (cache invalidation) in the background while the application is running - resulting in an updated application after a refresh.
 
-With dactylographsy every unit of an application can create a custom manifest listing all assets it consists of. These assets will be injected into the page while their contents will be cached once they are once loaded. Once the cache is filled it serves all files on any subsequent page load to speed up the initial load time. As mentioned, the caches might be invalidated at runtime by making a comparison between old and eventually new manifest(s).
+With dactylographsy every unit of an application can create a custom manifest listing all assets it consists of. These assets will be injected into the page while their contents will be cached when they are once loaded. After the cache is filled it serves all files on any subsequent page load to speed up the initial load time. As mentioned, the caches might be invalidated at runtime by making a comparison between old and eventually new manifest(s).
 
 [![Architecture Overview](https://github.com/tdeekens/grunt-dactylographsy/blob/master/docs/overview.png)](https://github.com/tdeekens/grunt-dactylographsy/blob/master/docs/overview.png)
 
