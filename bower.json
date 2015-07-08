@@ -1,0 +1,29 @@
+{
+  "name": "grunt-dactylographsy",
+  "version": "1.0.0",
+  "homepage": "https://github.com/tdeekens/grunt-dactylographsy",
+  "authors": [
+    "tdeekens <tobias.deekens@epost-dev.de>"
+  ],
+  "description": "Frontend components for consuming manifests produced by grunt-dactylographsy.",
+  "main": "src/dactylographsy.js",
+  "keywords": [
+    "fingerprinting",
+    "cachebusting",
+    "localstorage",
+    "script",
+    "injection"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "docs",
+    "example",
+    "tasks",
+    "grunt"
+  ]
+}
