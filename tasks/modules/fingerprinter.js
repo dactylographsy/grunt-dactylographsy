@@ -1,10 +1,12 @@
 var
   path = require('path'),
   fs = require('fs'),
+  _ = require('lodash'),
   crypto = require('crypto'),
   FileAnalyzer = require('../modules/file-analyzer');
 
-function Fingerprinter(root) {
+function Fingerprinter(root, devPaths) {
+  this.devPaths = devPaths;
   this.fileAnalyzer = new FileAnalyzer(root);
 }
 
@@ -26,12 +28,15 @@ Fingerprinter.prototype.hashFiles = function(files) {
     _prints[_digest] = {
       hash: _digest,
       file: path.basename(file),
-      path: path.dirname(file),
+      path: _.difference(
+        path.dirname(file).split('/'),
+        this.devPaths
+      ).join('/'),
       extension: path.extname(file)
     };
 
     _that.fileAnalyzer.duplicate(file, _digest);
-  });
+  }, this);
 
   return _prints;
 };

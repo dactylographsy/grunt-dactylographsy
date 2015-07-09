@@ -9,7 +9,7 @@ describe('Fingerprinter specification', () => {
   });
 
   beforeEach(() => {
-    fingerprinter = new Fingerprinter('./test/task/fixtures');
+    fingerprinter = new Fingerprinter('./test/task/fixtures', []);
   });
 
   it('hashes a set of files', () => {

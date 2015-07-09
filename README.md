@@ -60,6 +60,9 @@ location: 'dactylographsy.json'
 root: 'dist'
 // The project's root url: written into manifest, consumed by client-side script
 rootUrl: ''
+// Paths which assets are stored internally but which are not relevant for client-side script
+// e.g. /dist. These will be removed from paths to assets!
+devPaths: []
 // Additional meta information for manifest (JSON stringified)
 package: 'None'
 ```
@@ -74,3 +77,4 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 
 - 0.0.0 Development, do not use!
 - 1.0.0 Initial release with grunt-task and client-side script
+- 1.0.1 Add support for stripping dev folders from asset directories via devPaths option
