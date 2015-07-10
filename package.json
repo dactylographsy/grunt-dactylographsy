@@ -1,6 +1,6 @@
 {
   "name": "grunt-dactylographsy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A grunt plugin to fingerprint your assets while outputing the result.",
   "scripts": {
     "test": "grunt ci-test"

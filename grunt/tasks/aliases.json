@@ -3,7 +3,8 @@
     "clean",
     "test",
     "webpack",
-    "uglify"
+    "uglify",
+    "copy"
   ],
   "test": [
     "eslint",
