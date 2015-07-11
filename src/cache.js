@@ -1,8 +1,15 @@
 export default class Cache {
   constructor(options = {}) {
-    this.options = options;
+    let defaultPrefix = '__dactylographsy';
 
-    this.cachePrefix = this.options.cachePrefix || '__dactylographsy__';
+    this.options = options;
+    this.cachePrefix = this.options.cachePrefix || defaultPrefix;
+
+    if (this.options.appPrefix) {
+      this.cachePrefix = `${this.cachePrefix}--${this.options.appPrefix}__`;
+    } else {
+      this.cachePrefix += '__';
+    }
   }
 
   get(key, defaultValue) {

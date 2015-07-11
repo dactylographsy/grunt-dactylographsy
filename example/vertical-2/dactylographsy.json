@@ -1,23 +1,19 @@
 {
   "package": "vertical-2",
-  "rootUrl": "vertical-2",
   "hashes": {
     "hash4": {
       "hash": "hash4",
       "file": "1.js",
-      "path": "example",
       "extension": ".js"
     },
     "hash5": {
       "hash": "hash5",
       "file": "2.js",
-      "path": "example",
       "extension": ".js"
     },
     "hash6": {
       "hash": "hash6",
       "file": "1.css",
-      "path": "example",
       "extension": ".css"
     }
   }

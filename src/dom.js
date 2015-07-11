@@ -2,9 +2,11 @@ import Cache from './cache';
 import Ajax from './ajax';
 
 export class Js {
-  constructor(injectInto) {
+  constructor(injectInto, config = {}) {
     this.injectInto = injectInto;
-    this.cache = new Cache();
+    this.cache = new Cache({
+      appPrefix: config.appPrefix
+    });
   }
 
   injectWithText(text) {
@@ -83,9 +85,11 @@ export class Js {
 }
 
 export class Css {
-  constructor(injectInto) {
+  constructor(injectInto, config = {}) {
     this.injectInto = injectInto;
-    this.cache = new Cache();
+    this.cache = new Cache({
+      appPrefix: config.appPrefix
+    });
   }
 
   ensureCache(url) {

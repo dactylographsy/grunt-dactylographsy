@@ -7,7 +7,9 @@ export default class Dactylographsy {
 
     this.hookIntoDom();
     this.readConfiguration();
-    this.cache = new Cache();
+    this.cache = new Cache({
+      appPrefix: this.config.appPrefix
+    });
 
     if (autorun) { this.run(); }
   }

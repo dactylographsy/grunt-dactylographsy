@@ -109,7 +109,9 @@
 	
 	    this.hookIntoDom();
 	    this.readConfiguration();
-	    this.cache = new _cache2['default']();
+	    this.cache = new _cache2['default']({
+	      appPrefix: this.config.appPrefix
+	    });
 	
 	    if (autorun) {
 	      this.run();
@@ -236,9 +238,16 @@
 	
 	    _classCallCheck(this, Cache);
 	
-	    this.options = options;
+	    var defaultPrefix = '__dactylographsy';
 	
-	    this.cachePrefix = this.options.cachePrefix || '__dactylographsy__';
+	    this.options = options;
+	    this.cachePrefix = this.options.cachePrefix || defaultPrefix;
+	
+	    if (this.options.appPrefix) {
+	      this.cachePrefix = '' + this.cachePrefix + '--' + this.options.appPrefix + '__';
+	    } else {
+	      this.cachePrefix += '__';
+	    }
 	  }
 	
 	  _createClass(Cache, [{
@@ -340,16 +349,11 @@
 	
 	var _ajax2 = _interopRequireDefault(_ajax);
 	
-	var _cache = __webpack_require__(2);
-	
-	var _cache2 = _interopRequireDefault(_cache);
-	
 	var Manifest = (function () {
 	  function Manifest(url) {
 	    _classCallCheck(this, Manifest);
 	
 	    this.url = url;
-	    this.cache = new _cache2['default']();
 	  }
 	
 	  _createClass(Manifest, [{
@@ -388,7 +392,8 @@
 	      _this.manifests[manifest['package']] = manifest;
 	    });
 	
-	    this.prefix = options.prefix || '';
+	    this.options = options;
+	    this.prefix = options.prefix;
 	    this.order = options.order;
 	  }
 	
@@ -414,20 +419,25 @@
 	
 	      return hashes.map(function (hash) {
 	        var dependency = manifest.hashes[hash];
+	        var url = undefined;
 	
-	        _this3.injectDependency(dependency, manifest.rootUrl || manifest['package']);
+	        url = [manifest.rootUrl, manifest['package']].filter(function (_url) {
+	          return _url !== undefined;
+	        }).join('/');
+	
+	        _this3.injectDependency(dependency, url);
 	
 	        return hash;
 	      });
 	    }
 	  }, {
 	    key: 'injectDependency',
-	    value: function injectDependency(dependency, rootUrl) {
+	    value: function injectDependency(dependency, url) {
 	      switch (dependency.extension) {
 	        case '.css':
-	          return new _dom.Css(this.injectInto).inject(this.url(dependency, rootUrl));
+	          return new _dom.Css(this.injectInto, this.options).inject(this.url(dependency, url));
 	        case '.js':
-	          return new _dom.Js(this.injectInto).inject(this.url(dependency, rootUrl));
+	          return new _dom.Js(this.injectInto, this.options).inject(this.url(dependency, url));
 	      }
 	    }
 	  }, {
@@ -440,9 +450,14 @@
 	    value: function url(dependency) {
 	      var rootUrl = arguments[1] === undefined ? '' : arguments[1];
 	
-	      var basename = this.basename(dependency.file);
+	      var basename = this.basename(dependency.file),
+	          url = undefined;
 	
-	      return '' + this.prefix + '/' + dependency.path + '/' + rootUrl + '/' + basename + '-' + dependency.hash + '' + dependency.extension;
+	      url = [this.prefix, rootUrl, dependency.path].filter(function (_url) {
+	        return _url !== undefined;
+	      }).join('/');
+	
+	      return '' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension;
 	    }
 	  }]);
 	
@@ -491,10 +506,14 @@
 	
 	var Js = (function () {
 	  function Js(injectInto) {
+	    var config = arguments[1] === undefined ? {} : arguments[1];
+	
 	    _classCallCheck(this, Js);
 	
 	    this.injectInto = injectInto;
-	    this.cache = new _cache2['default']();
+	    this.cache = new _cache2['default']({
+	      appPrefix: config.appPrefix
+	    });
 	  }
 	
 	  _createClass(Js, [{
@@ -594,10 +613,14 @@
 	
 	var Css = (function () {
 	  function Css(injectInto) {
+	    var config = arguments[1] === undefined ? {} : arguments[1];
+	
 	    _classCallCheck(this, Css);
 	
 	    this.injectInto = injectInto;
-	    this.cache = new _cache2['default']();
+	    this.cache = new _cache2['default']({
+	      appPrefix: config.appPrefix
+	    });
 	  }
 	
 	  _createClass(Css, [{

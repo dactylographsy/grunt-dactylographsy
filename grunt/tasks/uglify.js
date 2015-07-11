@@ -9,6 +9,7 @@ module.exports = {
   options: {
     sourceMap: false,
     mangle: true,
-    beautify: false
+    beautify: false,
+    drop_console: true
   }
 };

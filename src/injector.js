@@ -1,11 +1,9 @@
 import {Css, Js} from './dom';
 import Ajax from './ajax';
-import Cache from './cache';
 
 export class Manifest {
   constructor(url) {
     this.url = url;
-    this.cache = new Cache();
   }
 
   get() {
@@ -35,7 +33,8 @@ export default class Injector {
       this.manifests[manifest.package] = manifest;
     });
 
-    this.prefix = options.prefix || '';
+    this.options = options;
+    this.prefix = options.prefix;
     this.order = options.order;
   }
 
@@ -55,26 +54,36 @@ export default class Injector {
 
     return hashes.map(hash => {
       let dependency = manifest.hashes[hash];
+      let url;
 
-      this.injectDependency(dependency, manifest.rootUrl || manifest.package);
+      url = [manifest.rootUrl, manifest.package].filter(_url => {
+        return _url !== undefined;
+      }).join('/');
+
+      this.injectDependency(
+        dependency,
+        url
+      );
 
       return hash;
     });
   }
 
-  injectDependency(dependency, rootUrl) {
+  injectDependency(dependency, url) {
     switch (dependency.extension) {
       case '.css':
         return new Css(
-          this.injectInto
+          this.injectInto,
+          this.options
         ).inject(
-          this.url(dependency, rootUrl)
+          this.url(dependency, url)
         );
       case '.js':
         return new Js(
-          this.injectInto
+          this.injectInto,
+          this.options
         ).inject(
-          this.url(dependency, rootUrl)
+          this.url(dependency, url)
         );
     }
   }
@@ -84,8 +93,14 @@ export default class Injector {
   }
 
   url(dependency, rootUrl = '') {
-    let basename = this.basename(dependency.file);
+    let
+      basename = this.basename(dependency.file),
+      url;
 
-    return `${this.prefix}/${dependency.path}/${rootUrl}/${basename}-${dependency.hash}${dependency.extension}`;
+    url = [this.prefix, rootUrl, dependency.path].filter(_url => {
+      return _url !== undefined;
+    }).join('/');
+
+    return `${url}/${basename}-${dependency.hash}${dependency.extension}`;
   }
 }

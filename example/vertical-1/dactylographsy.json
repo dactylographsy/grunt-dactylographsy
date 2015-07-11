@@ -4,19 +4,16 @@
     "hash1": {
       "hash": "hash1",
       "file": "1.js",
-      "path": "example",
       "extension": ".js"
     },
     "hash2": {
       "hash": "hash2",
       "file": "2.js",
-      "path": "example",
       "extension": ".js"
     },
     "hash3": {
       "hash": "hash3",
       "file": "1.css",
-      "path": "example",
       "extension": ".css"
     }
   }

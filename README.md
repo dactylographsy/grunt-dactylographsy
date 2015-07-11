@@ -79,3 +79,4 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.0.0 Initial release with grunt-task and client-side script
 - 1.0.1 Add support for stripping dev folders from asset directories via devPaths option
 - 1.0.2 Add versioned client side bundles
+- 1.1.0 Refactor root path resolving and add support for cache prefix
