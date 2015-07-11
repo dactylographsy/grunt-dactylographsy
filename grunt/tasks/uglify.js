@@ -10,6 +10,8 @@ module.exports = {
     sourceMap: false,
     mangle: true,
     beautify: false,
-    drop_console: true
+    compress: {
+      drop_console: true
+    }
   }
 };
