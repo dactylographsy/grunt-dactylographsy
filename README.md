@@ -16,7 +16,7 @@ Imagine JavaScript und CSS files being cached in the client via localstorage by 
 
 With dactylographsy every unit of an application can create a custom manifest listing all assets it consists of. These assets will be injected into the page while their contents will be cached when they are once loaded. After the cache is filled it serves all files on any subsequent page load to speed up the initial load time. As mentioned, the caches might be invalidated at runtime by making a comparison between old and eventually new manifest(s).
 
-[![Architecture Overview](https://raw.githubusercontent.com/tdeekens/grunt-dactylographsy/master/docs/overview.png)
+![Architecture Overview](https://raw.githubusercontent.com/tdeekens/grunt-dactylographsy/master/docs/overview.png)
 
 A running example can be found [here](https://github.com/tdeekens/grunt-dactylographsy/blob/master/example).
 
