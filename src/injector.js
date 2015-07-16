@@ -56,7 +56,7 @@ export default class Injector {
       let dependency = manifest.hashes[hash];
       let url;
 
-      url = [manifest.rootUrl, manifest.package].filter(_url => {
+      url = [manifest.rootUrl, manifest.packageUrl].filter(_url => {
         return (
           _url !== undefined &&
           _url !== null

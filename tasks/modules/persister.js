@@ -1,11 +1,12 @@
 var
   fs = require('fs');
 
-function Persister(packageMeta, root, location, rootUrl) {
+function Persister(packageMeta, root, location, rootUrl, packageUrl) {
   this._packageMeta = packageMeta;
   this._root = root;
   this._location = location;
   this._rootUrl = rootUrl;
+  this._packageUrl = packageUrl;
 }
 
 Persister.prototype.write = function(hashes) {
@@ -14,6 +15,7 @@ Persister.prototype.write = function(hashes) {
   data.package = this._packageMeta;
   data.hashes = hashes;
   data.rootUrl = this._rootUrl;
+  data.packageUrl = this._packageUrl;
 
   var json = JSON.stringify(data, null, 2);
 

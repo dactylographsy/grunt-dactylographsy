@@ -421,8 +421,8 @@
 	        var dependency = manifest.hashes[hash];
 	        var url = undefined;
 	
-	        url = [manifest.rootUrl, manifest['package']].filter(function (_url) {
-	          return _url !== undefined;
+	        url = [manifest.rootUrl, manifest.packageUrl].filter(function (_url) {
+	          return _url !== undefined && _url !== null;
 	        }).join('/');
 	
 	        _this3.injectDependency(dependency, url);
@@ -454,10 +454,10 @@
 	          url = undefined;
 	
 	      url = [this.prefix, rootUrl, dependency.path].filter(function (_url) {
-	        return _url !== undefined;
+	        return _url !== undefined && _url !== null;
 	      }).join('/');
 	
-	      return '' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension;
+	      return '/' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension;
 	    }
 	  }]);
 	

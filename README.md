@@ -56,14 +56,16 @@ Or add it to an existing task: `grunt.registerTask('test', ['clean', 'dactylogra
 ```js
 // Location of manifest file containing file information with hashes
 location: 'dactylographsy.json'
-// Root impacting location
+// Root impacting location of dactylographsy.json
 root: 'dist'
 // The project's root url: written into manifest, consumed by client-side script
-rootUrl: ''
+rootUrl: null
+// Additional package url: e.g. if multiple packages reside on the same host
+packageUrl: null
 // Paths which assets are stored internally but which are not relevant for client-side script
 // e.g. /dist. These will be removed from paths to assets!
 devPaths: []
-// Additional meta information for manifest (JSON stringified)
+// The package name to identify the manifest by
 package: 'None'
 ```
 
@@ -81,3 +83,4 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.0.2 Add versioned client side bundles
 - 1.1.0 Refactor root path resolving and add support for cache prefix
 - 1.1.1 Fix root path resolving adding stripping of null'ed values
+- 1.1.2 Add a package url option

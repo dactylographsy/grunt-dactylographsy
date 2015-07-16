@@ -3,5 +3,6 @@
   "hashes": {
     "foo": "bar"
   },
-  "rootUrl": "singularity"
+  "rootUrl": "singularity",
+  "packageUrl": "timelapse"
 }

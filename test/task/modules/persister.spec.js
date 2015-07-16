@@ -7,6 +7,7 @@ var Persister = require('../../../tasks/modules/persister'),
 var
   root = './test/task/fixtures',
   rootUrl = 'singularity',
+  packageUrl = 'timelapse',
   file = 'persister.json';
 
 describe('Persister specification', () => {
@@ -14,7 +15,7 @@ describe('Persister specification', () => {
   })
 
   beforeEach(() => {
-    persister = new Persister('None', root, file, rootUrl);
+    persister = new Persister('None', root, file, rootUrl, packageUrl);
   });
 
   it('creates a file as a store', () => {
@@ -46,5 +47,18 @@ describe('Persister specification', () => {
     var read = persister.read();
 
     expect(read.rootUrl).to.equal(rootUrl);
+  });
+
+  it('writes the packageUrl to the manifest', () => {
+    var written = JSON.parse(persister.write({
+      foo: 'bar'
+    }));
+
+    expect(written).to.be.an.object;
+    expect(written.packageUrl).to.equal(packageUrl);
+
+    var read = persister.read();
+
+    expect(read.packageUrl).to.equal(packageUrl);
   });
 });
