@@ -57,7 +57,10 @@ export default class Injector {
       let url;
 
       url = [manifest.rootUrl, manifest.package].filter(_url => {
-        return _url !== undefined;
+        return (
+          _url !== undefined &&
+          _url !== null
+        );
       }).join('/');
 
       this.injectDependency(
@@ -98,9 +101,12 @@ export default class Injector {
       url;
 
     url = [this.prefix, rootUrl, dependency.path].filter(_url => {
-      return _url !== undefined;
+      return (
+        _url !== undefined &&
+        _url !== null
+      );
     }).join('/');
 
-    return `${url}/${basename}-${dependency.hash}${dependency.extension}`;
+    return `/${url}/${basename}-${dependency.hash}${dependency.extension}`;
   }
 }
