@@ -91,3 +91,6 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - [ ] Add fallback to unprinted assets when loading fails (no caching)
 - [ ] Allow catching up existing script tags (data-default-script)
   - Removes intiial load delay by requesting manifests
+- [ ] Feature detect localstorage and don't cache if not present
+- [ ] Add support for changing cache to e.g. sessionstorage
+- [ ] Add config for cache lifetime (for sessionstorage)
