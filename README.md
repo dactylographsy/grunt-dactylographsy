@@ -84,6 +84,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.1.0 Refactor root path resolving and add support for cache prefix
 - 1.1.1 Fix root path resolving adding stripping of null'ed values
 - 1.1.2 Add a package url option
+- 1.1.3 Release caused by upgrade of UglifyJS
 
 ## Feature Ideas
 
