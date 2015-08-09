@@ -46,7 +46,7 @@ export class Js {
       } else {
         // Bind `onload` callback on script element
         script.onload = () => {
-          if (whichUrl === 'printed') { this.ensureCache(url); }
+          if (whichUrl === 'printed') { this.ensureCache(url, 15000); }
         };
 
         // Inject unprinted without caching in case of error
@@ -65,24 +65,24 @@ export class Js {
     });
   }
 
-  ensureCache(url) {
+  ensureCache(url, delay = 0) {
     return new Promise((resolve, reject) => {
-      window.setTimeout(() => {
         if (this.cache.has(url)) { resolve(); }
 
-        return new Ajax()
-          .get(url)
-          .then(response => {
-            let { text: responseText } = response;
+        window.setTimeout(() => {
+          return new Ajax()
+            .get(url)
+            .then(response => {
+              let { text: responseText } = response;
 
-            this.cache.set(responseText, 'js', url);
+              this.cache.set(responseText, 'js', url);
 
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          });
-      }, 15000);
+              resolve();
+            })
+            .catch(() => {
+              reject();
+            });
+        }, delay);
     });
   }
 
@@ -105,21 +105,23 @@ export class Css {
     });
   }
 
-  ensureCache(url) {
+  ensureCache(url, delay = 0) {
     return new Promise((resolve, reject) => {
       if (this.cache.has(url)) { resolve(); }
 
-      return new Ajax()
-        .get(url)
-        .then(response => {
-          let { text: responseText } = response;
+      window.setTimeout(() => {
+        return new Ajax()
+          .get(url)
+          .then(response => {
+            let { text: responseText } = response;
 
-          this.cache.set(responseText, 'css', url);
+            this.cache.set(responseText, 'css', url);
 
-          resolve();
-        }).catch(() => {
-          reject();
-        });
+            resolve();
+          }).catch(() => {
+            reject();
+          });
+      }, delay);
     });
   }
 

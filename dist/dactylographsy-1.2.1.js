@@ -567,7 +567,7 @@
 	          // Bind `onload` callback on script element
 	          script.onload = function () {
 	            if (whichUrl === 'printed') {
-	              _this2.ensureCache(url);
+	              _this2.ensureCache(url, 15000);
 	            }
 	          };
 	
@@ -595,12 +595,14 @@
 	    value: function ensureCache(url) {
 	      var _this3 = this;
 	
-	      return new Promise(function (resolve, reject) {
-	        window.setTimeout(function () {
-	          if (_this3.cache.has(url)) {
-	            resolve();
-	          }
+	      var delay = arguments[1] === undefined ? 0 : arguments[1];
 	
+	      return new Promise(function (resolve, reject) {
+	        if (_this3.cache.has(url)) {
+	          resolve();
+	        }
+	
+	        window.setTimeout(function () {
 	          return new _ajax2['default']().get(url).then(function (response) {
 	            var responseText = response.text;
 	
@@ -610,7 +612,7 @@
 	          })['catch'](function () {
 	            reject();
 	          });
-	        }, 15000);
+	        }, delay);
 	      });
 	    }
 	  }, {
@@ -648,20 +650,24 @@
 	    value: function ensureCache(url) {
 	      var _this5 = this;
 	
+	      var delay = arguments[1] === undefined ? 0 : arguments[1];
+	
 	      return new Promise(function (resolve, reject) {
 	        if (_this5.cache.has(url)) {
 	          resolve();
 	        }
 	
-	        return new _ajax2['default']().get(url).then(function (response) {
-	          var responseText = response.text;
+	        window.setTimeout(function () {
+	          return new _ajax2['default']().get(url).then(function (response) {
+	            var responseText = response.text;
 	
-	          _this5.cache.set(responseText, 'css', url);
+	            _this5.cache.set(responseText, 'css', url);
 	
-	          resolve();
-	        })['catch'](function () {
-	          reject();
-	        });
+	            resolve();
+	          })['catch'](function () {
+	            reject();
+	          });
+	        }, delay);
 	      });
 	    }
 	  }, {

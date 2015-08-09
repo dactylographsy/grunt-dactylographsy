@@ -86,6 +86,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.1.2 Add a package url option
 - 1.1.3 Release caused by upgrade of UglifyJS
 - 1.2.0 Add injection of unprinted scripts in case of error
+- 1.2.1 Delay caching while still immediately taking care of 404'ed assets 
 
 ## Feature Ideas
 
