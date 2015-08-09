@@ -1,15 +1,15 @@
 {
-  "package": "vertical-3",
-  "packageUrl": "vertical-3",
+  "package": "vertical-4",
+  "packageUrl": "vertical-4",
   "rootUrl": "example",
   "hashes": {
     "hash7": {
-      "hash": "hash7",
+      "hash": "hash9",
       "file": "1.js",
       "extension": ".js"
     },
     "hash8": {
-      "hash": "hash8",
+      "hash": "hash10",
       "file": "1.css",
       "extension": ".css"
     }

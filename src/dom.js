@@ -23,10 +23,12 @@ export class Js {
     });
   }
 
-  injectWithUrl(url) {
+  injectWithUrl(urls, whichUrl = 'printed') {
     return new Promise(resolve => {
       // Create script element and set its type
-      let script = document.createElement('script');
+      let
+        script = document.createElement('script'),
+        url = urls[whichUrl];
 
       script.type = 'text/javascript';
       script.async = false;
@@ -38,17 +40,23 @@ export class Js {
           if (script.readyState === 'loaded' || script.readyState === 'complete') {
             script.onreadystatechange = null;
 
-            this.cache(url);
+            this.ensureCache(url);
           }
         };
       } else {
         // Bind `onload` callback on script element
         script.onload = () => {
-          this.ensureCache(url);
+          if (whichUrl === 'printed') { this.ensureCache(url); }
+        };
+
+        // Inject unprinted without caching in case of error
+        script.onerror = () => {
+          console.info(`Could not fetch JavaScript from ${url} - falling back to unprinted version.`);
+
+          if (whichUrl === 'printed') { this.injectWithUrl(urls, 'raw'); }
         };
       }
 
-      // Set the url
       script.src = url;
 
       if (this.injectInto) { this.injectInto.appendChild(script); }
@@ -58,28 +66,33 @@ export class Js {
   }
 
   ensureCache(url) {
-    return new Promise(resolve => {
-      if (this.cache.has(url)) { resolve(); }
+    return new Promise((resolve, reject) => {
+      window.setTimeout(() => {
+        if (this.cache.has(url)) { resolve(); }
 
-      return new Ajax()
-        .get(url)
-        .then(response => {
-          let { text: responseText } = response;
+        return new Ajax()
+          .get(url)
+          .then(response => {
+            let { text: responseText } = response;
 
-          this.cache.set(responseText, 'js', url);
+            this.cache.set(responseText, 'js', url);
 
-          resolve();
-        });
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          });
+      }, 15000);
     });
   }
 
-  inject(url) {
-    return this.cache.get(url)
+  inject(urls) {
+    return this.cache.get(urls.printed)
       .then(text => {
         return this.injectWithText(text);
       })
       .catch(() => {
-        return this.injectWithUrl(url);
+        return this.injectWithUrl(urls);
       });
   }
 }
@@ -93,7 +106,7 @@ export class Css {
   }
 
   ensureCache(url) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (this.cache.has(url)) { resolve(); }
 
       return new Ajax()
@@ -104,13 +117,17 @@ export class Css {
           this.cache.set(responseText, 'css', url);
 
           resolve();
+        }).catch(() => {
+          reject();
         });
     });
   }
 
-  injectWithUrl(url) {
+  injectWithUrl(urls, whichUrl = 'printed') {
     return new Promise(resolve => {
-      let link = document.createElement('link');
+      let
+        link = document.createElement('link'),
+        url = urls[whichUrl];
 
       link = document.createElement('link');
 
@@ -121,7 +138,16 @@ export class Css {
 
       if (this.injectInto) { this.injectInto.appendChild(link); }
 
-      this.ensureCache(url);
+      // Fallback to unprinted assets after cache attempt
+      // no callbacks for stylesheet injections (timeouts are worse...)
+      if (whichUrl === 'printed') {
+        this.ensureCache(url)
+          .catch(() => {
+            console.info(`Could not fetch CSS from ${url} - falling back to unprinted version.`);
+
+            this.injectWithUrl(urls, 'raw');
+          });
+      }
 
       resolve(link);
     });
@@ -141,13 +167,13 @@ export class Css {
     });
   }
 
-  inject(url) {
-    return this.cache.get(url)
+  inject(urls) {
+    return this.cache.get(urls.printed)
       .then(text => {
         return this.injectWithText(text);
       })
       .catch(() => {
-        return this.injectWithUrl(url);
+        return this.injectWithUrl(urls);
       });
   }
 }

@@ -1,5 +1,7 @@
 {
   "package": "vertical-1",
+  "packageUrl": "vertical-1",
+  "rootUrl": "example",
   "hashes": {
     "hash1": {
       "hash": "hash1",

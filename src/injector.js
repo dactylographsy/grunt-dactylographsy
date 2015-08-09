@@ -53,10 +53,11 @@ export default class Injector {
       hashes = Object.keys(manifest.hashes);
 
     return hashes.map(hash => {
-      let dependency = manifest.hashes[hash];
-      let url;
+      let
+        dependency = manifest.hashes[hash],
+        rootUrl;
 
-      url = [manifest.rootUrl, manifest.packageUrl].filter(_url => {
+      rootUrl = [manifest.rootUrl, manifest.packageUrl].filter(_url => {
         return (
           _url !== undefined &&
           _url !== null
@@ -65,28 +66,28 @@ export default class Injector {
 
       this.injectDependency(
         dependency,
-        url
+        rootUrl
       );
 
       return hash;
     });
   }
 
-  injectDependency(dependency, url) {
+  injectDependency(dependency, rootUrl) {
     switch (dependency.extension) {
       case '.css':
         return new Css(
           this.injectInto,
           this.options
         ).inject(
-          this.url(dependency, url)
+          this.url(dependency, rootUrl)
         );
       case '.js':
         return new Js(
           this.injectInto,
           this.options
         ).inject(
-          this.url(dependency, url)
+          this.url(dependency, rootUrl)
         );
     }
   }
@@ -107,6 +108,9 @@ export default class Injector {
       );
     }).join('/');
 
-    return `/${url}/${basename}-${dependency.hash}${dependency.extension}`;
+    return {
+      printed: `/${url}/${basename}-${dependency.hash}${dependency.extension}`,
+      raw: `/${url}/${basename}${dependency.extension}`
+    };
   }
 }

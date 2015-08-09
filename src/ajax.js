@@ -30,15 +30,19 @@ export default class Ajax {
       }
 
       // Response handlers.
-      xhr.onload = function() {
-        resolve({
-          xhr: xhr,
-          text: xhr.responseText,
-          url: xhr.responseURL
-        });
+      xhr.onload = () => {
+        if (xhr.status >= 400) {
+          reject(xhr);
+        } else {
+          resolve({
+            xhr: xhr,
+            text: xhr.responseText,
+            url: xhr.responseURL
+          });
+        }
       };
 
-      xhr.onerror = function() {
+      xhr.onerror = () => {
         reject(xhr);
       };
 

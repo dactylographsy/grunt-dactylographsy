@@ -85,12 +85,13 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.1.1 Fix root path resolving adding stripping of null'ed values
 - 1.1.2 Add a package url option
 - 1.1.3 Release caused by upgrade of UglifyJS
+- 1.2.0 Add injection of unprinted scripts in case of error
 
 ## Feature Ideas
 
-- [ ] Add fallback to unprinted assets when loading fails (no caching)
-- [ ] Allow catching up existing script tags (data-default-script)
-  - Removes intiial load delay by requesting manifests
+- [x] Add fallback to unprinted assets when loading fails (no caching)
+- ~~[ ] Allow catching up existing script tags (data-default-script)~~
+  - ~~Removes intiial load delay by requesting manifests~~
 - [ ] Feature detect localstorage and don't cache if not present
 - [ ] Add support for changing cache to e.g. sessionstorage
 - [ ] Add config for cache lifetime (for sessionstorage)

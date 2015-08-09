@@ -418,26 +418,26 @@
 	      var hashes = Object.keys(manifest.hashes);
 	
 	      return hashes.map(function (hash) {
-	        var dependency = manifest.hashes[hash];
-	        var url = undefined;
+	        var dependency = manifest.hashes[hash],
+	            rootUrl = undefined;
 	
-	        url = [manifest.rootUrl, manifest.packageUrl].filter(function (_url) {
+	        rootUrl = [manifest.rootUrl, manifest.packageUrl].filter(function (_url) {
 	          return _url !== undefined && _url !== null;
 	        }).join('/');
 	
-	        _this3.injectDependency(dependency, url);
+	        _this3.injectDependency(dependency, rootUrl);
 	
 	        return hash;
 	      });
 	    }
 	  }, {
 	    key: 'injectDependency',
-	    value: function injectDependency(dependency, url) {
+	    value: function injectDependency(dependency, rootUrl) {
 	      switch (dependency.extension) {
 	        case '.css':
-	          return new _dom.Css(this.injectInto, this.options).inject(this.url(dependency, url));
+	          return new _dom.Css(this.injectInto, this.options).inject(this.url(dependency, rootUrl));
 	        case '.js':
-	          return new _dom.Js(this.injectInto, this.options).inject(this.url(dependency, url));
+	          return new _dom.Js(this.injectInto, this.options).inject(this.url(dependency, rootUrl));
 	      }
 	    }
 	  }, {
@@ -457,7 +457,10 @@
 	        return _url !== undefined && _url !== null;
 	      }).join('/');
 	
-	      return '/' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension;
+	      return {
+	        printed: '/' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension,
+	        raw: '/' + url + '/' + basename + '' + dependency.extension
+	      };
 	    }
 	  }]);
 	
@@ -537,12 +540,15 @@
 	    }
 	  }, {
 	    key: 'injectWithUrl',
-	    value: function injectWithUrl(url) {
+	    value: function injectWithUrl(urls) {
 	      var _this2 = this;
+	
+	      var whichUrl = arguments[1] === undefined ? 'printed' : arguments[1];
 	
 	      return new Promise(function (resolve) {
 	        // Create script element and set its type
-	        var script = document.createElement('script');
+	        var script = document.createElement('script'),
+	            url = urls[whichUrl];
 	
 	        script.type = 'text/javascript';
 	        script.async = false;
@@ -554,17 +560,27 @@
 	            if (script.readyState === 'loaded' || script.readyState === 'complete') {
 	              script.onreadystatechange = null;
 	
-	              _this2.cache(url);
+	              _this2.ensureCache(url);
 	            }
 	          };
 	        } else {
 	          // Bind `onload` callback on script element
 	          script.onload = function () {
-	            _this2.ensureCache(url);
+	            if (whichUrl === 'printed') {
+	              _this2.ensureCache(url);
+	            }
+	          };
+	
+	          // Inject unprinted without caching in case of error
+	          script.onerror = function () {
+	            console.info('Could not fetch JavaScript from ' + url + ' - falling back to unprinted version.');
+	
+	            if (whichUrl === 'printed') {
+	              _this2.injectWithUrl(urls, 'raw');
+	            }
 	          };
 	        }
 	
-	        // Set the url
 	        script.src = url;
 	
 	        if (_this2.injectInto) {
@@ -579,29 +595,33 @@
 	    value: function ensureCache(url) {
 	      var _this3 = this;
 	
-	      return new Promise(function (resolve) {
-	        if (_this3.cache.has(url)) {
-	          resolve();
-	        }
+	      return new Promise(function (resolve, reject) {
+	        window.setTimeout(function () {
+	          if (_this3.cache.has(url)) {
+	            resolve();
+	          }
 	
-	        return new _ajax2['default']().get(url).then(function (response) {
-	          var responseText = response.text;
+	          return new _ajax2['default']().get(url).then(function (response) {
+	            var responseText = response.text;
 	
-	          _this3.cache.set(responseText, 'js', url);
+	            _this3.cache.set(responseText, 'js', url);
 	
-	          resolve();
-	        });
+	            resolve();
+	          })['catch'](function () {
+	            reject();
+	          });
+	        }, 15000);
 	      });
 	    }
 	  }, {
 	    key: 'inject',
-	    value: function inject(url) {
+	    value: function inject(urls) {
 	      var _this4 = this;
 	
-	      return this.cache.get(url).then(function (text) {
+	      return this.cache.get(urls.printed).then(function (text) {
 	        return _this4.injectWithText(text);
 	      })['catch'](function () {
-	        return _this4.injectWithUrl(url);
+	        return _this4.injectWithUrl(urls);
 	      });
 	    }
 	  }]);
@@ -628,7 +648,7 @@
 	    value: function ensureCache(url) {
 	      var _this5 = this;
 	
-	      return new Promise(function (resolve) {
+	      return new Promise(function (resolve, reject) {
 	        if (_this5.cache.has(url)) {
 	          resolve();
 	        }
@@ -639,16 +659,21 @@
 	          _this5.cache.set(responseText, 'css', url);
 	
 	          resolve();
+	        })['catch'](function () {
+	          reject();
 	        });
 	      });
 	    }
 	  }, {
 	    key: 'injectWithUrl',
-	    value: function injectWithUrl(url) {
+	    value: function injectWithUrl(urls) {
 	      var _this6 = this;
 	
+	      var whichUrl = arguments[1] === undefined ? 'printed' : arguments[1];
+	
 	      return new Promise(function (resolve) {
-	        var link = document.createElement('link');
+	        var link = document.createElement('link'),
+	            url = urls[whichUrl];
 	
 	        link = document.createElement('link');
 	
@@ -661,7 +686,15 @@
 	          _this6.injectInto.appendChild(link);
 	        }
 	
-	        _this6.ensureCache(url);
+	        // Fallback to unprinted assets after cache attempt
+	        // no callbacks for stylesheet injections (timeouts are worse...)
+	        if (whichUrl === 'printed') {
+	          _this6.ensureCache(url)['catch'](function () {
+	            console.info('Could not fetch CSS from ' + url + ' - falling back to unprinted version.');
+	
+	            _this6.injectWithUrl(urls, 'raw');
+	          });
+	        }
 	
 	        resolve(link);
 	      });
@@ -687,13 +720,13 @@
 	    }
 	  }, {
 	    key: 'inject',
-	    value: function inject(url) {
+	    value: function inject(urls) {
 	      var _this8 = this;
 	
-	      return this.cache.get(url).then(function (text) {
+	      return this.cache.get(urls.printed).then(function (text) {
 	        return _this8.injectWithText(text);
 	      })['catch'](function () {
-	        return _this8.injectWithUrl(url);
+	        return _this8.injectWithUrl(urls);
 	      });
 	    }
 	  }]);
@@ -766,11 +799,15 @@
 	
 	        // Response handlers.
 	        xhr.onload = function () {
-	          resolve({
-	            xhr: xhr,
-	            text: xhr.responseText,
-	            url: xhr.responseURL
-	          });
+	          if (xhr.status >= 400) {
+	            reject(xhr);
+	          } else {
+	            resolve({
+	              xhr: xhr,
+	              text: xhr.responseText,
+	              url: xhr.responseURL
+	            });
+	          }
 	        };
 	
 	        xhr.onerror = function () {
