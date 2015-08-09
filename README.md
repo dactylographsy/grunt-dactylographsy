@@ -86,13 +86,14 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.1.2 Add a package url option
 - 1.1.3 Release caused by upgrade of UglifyJS
 - 1.2.0 Add injection of unprinted scripts in case of error
-- 1.2.1 Delay caching while still immediately taking care of 404'ed assets 
+- 1.2.1 Delay caching while still immediately taking care of 404'ed assets
+- 1.3.0 Feature detect localstorage
 
 ## Feature Ideas
 
 - [x] Add fallback to unprinted assets when loading fails (no caching)
 - ~~[ ] Allow catching up existing script tags (data-default-script)~~
   - ~~Removes intiial load delay by requesting manifests~~
-- [ ] Feature detect localstorage and don't cache if not present
+- [x] Feature detect localstorage and don't cache if not present
 - [ ] Add support for changing cache to e.g. sessionstorage
-- [ ] Add config for cache lifetime (for sessionstorage)
+  - [ ] Add config for cache lifetime (for sessionstorage)

@@ -4,6 +4,7 @@ export default class Cache {
 
     this.options = options;
     this.cachePrefix = this.options.cachePrefix || defaultPrefix;
+    this.isSupported = this.supported();
 
     if (this.options.appPrefix) {
       this.cachePrefix = `${this.cachePrefix}--${this.options.appPrefix}__`;
@@ -14,6 +15,8 @@ export default class Cache {
 
   get(key, defaultValue) {
     return new Promise((resolve, reject) => {
+      if (!this.isSupported) { reject(); }
+
       let _item = JSON.parse(
         localStorage.getItem(`${this.cachePrefix}-${key}`)
       );
@@ -39,10 +42,14 @@ export default class Cache {
   }
 
   has(key) {
+    if (!this.isSupported) { return false; }
+
     return localStorage.getItem(key) !== null;
   }
 
   set(code, type, url) {
+    if (!this.isSupported) { return false; }
+
     let cached = {
       now: +new Date(),
       url: url,
@@ -54,15 +61,37 @@ export default class Cache {
       `${this.cachePrefix}-${url}`,
       JSON.stringify(cached)
     );
+
+    return true;
   }
 
   flush() {
+    if (!this.isSupported) { return false; }
+
     for (let key in localStorage) {
       if (key.indexOf(this.cachePrefix) >= 0) {
         console.log(`Removing item ${key} requested by flush.`);
 
         localStorage.removeItem(key);
       }
+    }
+
+    return true;
+  }
+
+  supported() {
+    let
+      item = '__dactylographsy__feature-detection';
+
+    try {
+      localStorage.setItem(item, item);
+      localStorage.removeItem(item);
+
+      return true;
+    } catch(e) {
+      console.warn(`Localstorage not supported in browser - no caching!`);
+
+      return false;
     }
   }
 }

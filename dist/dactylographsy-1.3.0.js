@@ -242,6 +242,7 @@
 	
 	    this.options = options;
 	    this.cachePrefix = this.options.cachePrefix || defaultPrefix;
+	    this.isSupported = this.supported();
 	
 	    if (this.options.appPrefix) {
 	      this.cachePrefix = '' + this.cachePrefix + '--' + this.options.appPrefix + '__';
@@ -256,6 +257,10 @@
 	      var _this = this;
 	
 	      return new Promise(function (resolve, reject) {
+	        if (!_this.isSupported) {
+	          reject();
+	        }
+	
 	        var _item = JSON.parse(localStorage.getItem('' + _this.cachePrefix + '-' + key));
 	
 	        if (_item === null && defaultValue !== undefined) {
@@ -280,11 +285,19 @@
 	  }, {
 	    key: 'has',
 	    value: function has(key) {
+	      if (!this.isSupported) {
+	        return false;
+	      }
+	
 	      return localStorage.getItem(key) !== null;
 	    }
 	  }, {
 	    key: 'set',
 	    value: function set(code, type, url) {
+	      if (!this.isSupported) {
+	        return false;
+	      }
+	
 	      var cached = {
 	        now: +new Date(),
 	        url: url,
@@ -293,16 +306,40 @@
 	      };
 	
 	      localStorage.setItem('' + this.cachePrefix + '-' + url, JSON.stringify(cached));
+	
+	      return true;
 	    }
 	  }, {
 	    key: 'flush',
 	    value: function flush() {
+	      if (!this.isSupported) {
+	        return false;
+	      }
+	
 	      for (var key in localStorage) {
 	        if (key.indexOf(this.cachePrefix) >= 0) {
 	          console.log('Removing item ' + key + ' requested by flush.');
 	
 	          localStorage.removeItem(key);
 	        }
+	      }
+	
+	      return true;
+	    }
+	  }, {
+	    key: 'supported',
+	    value: function supported() {
+	      var item = '__dactylographsy__feature-detection';
+	
+	      try {
+	        localStorage.setItem(item, item);
+	        localStorage.removeItem(item);
+	
+	        return true;
+	      } catch (e) {
+	        console.warn('Localstorage not supported in browser - no caching!');
+	
+	        return false;
 	      }
 	    }
 	  }]);
