@@ -41,14 +41,15 @@ export default class Dactylographsy {
   restore() {
     return this.cache.get('manifests')
       .then(manifests => {
-        console.info(`Resotring with manifests in cache later refreshing via network.`);
+        console.info(`Resotring with manifests in cache later refreshing via network (delayed).`);
 
-        new Injector(this.injectInto, manifests, this.config).inject();
+        new Injector(
+          this.injectInto,
+          manifests,
+          this.config
+        ).inject();
 
         return false;
-      })
-      .catch(() => {
-        console.info(`No manifests in cache, refreshing via network.`);
       });
   }
 
@@ -76,7 +77,18 @@ export default class Dactylographsy {
 
     return this.restore()
       .then(injectedFromCache => {
-        return this.refresh(injectedFromCache);
+        let { refreshDelay = 5000 } = this.config;
+
+        return new Promise((resolve, reject) => {
+          window.setTimeout(() => {
+            this.refresh(injectedFromCache)
+              .then(resolve, reject);
+          }, refreshDelay );
+        });
+      }).catch(() => {
+        console.info(`No manifests in cache, refreshing via network.`);
+
+        return this.refresh();
       });
   }
 }

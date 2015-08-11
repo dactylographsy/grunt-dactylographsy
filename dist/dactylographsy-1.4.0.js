@@ -157,13 +157,11 @@
 	      var _this2 = this;
 	
 	      return this.cache.get('manifests').then(function (manifests) {
-	        console.info('Resotring with manifests in cache later refreshing via network.');
+	        console.info('Resotring with manifests in cache later refreshing via network (delayed).');
 	
 	        new _injector2['default'](_this2.injectInto, manifests, _this2.config).inject();
 	
 	        return false;
-	      })['catch'](function () {
-	        console.info('No manifests in cache, refreshing via network.');
 	      });
 	    }
 	  }, {
@@ -195,7 +193,18 @@
 	      }
 	
 	      return this.restore().then(function (injectedFromCache) {
-	        return _this3.refresh(injectedFromCache);
+	        var _config$refreshDelay = _this3.config.refreshDelay;
+	        var refreshDelay = _config$refreshDelay === undefined ? 5000 : _config$refreshDelay;
+	
+	        return new Promise(function (resolve, reject) {
+	          window.setTimeout(function () {
+	            _this3.refresh(injectedFromCache).then(resolve, reject);
+	          }, refreshDelay);
+	        });
+	      })['catch'](function () {
+	        console.info('No manifests in cache, refreshing via network.');
+	
+	        return _this3.refresh();
 	      });
 	    }
 	  }]);
