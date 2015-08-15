@@ -9,11 +9,13 @@ export class Js {
     });
   }
 
-  injectWithText(text) {
-    return new Promise((resolve) => {
+  injectWithText(text, url) {
+    return new Promise(resolve => {
       let script = document.createElement('script');
 
       script.defer = true;
+
+      script.setAttribute('data-dactylographsy-url', url);
 
       script.text = text;
 
@@ -32,6 +34,8 @@ export class Js {
 
       script.type = 'text/javascript';
       script.async = false;
+
+      script.setAttribute('data-dactylographsy-url', url);
 
       // Bind to readyState or register ´onload´ callback
       if (script.readyState) {
@@ -89,7 +93,7 @@ export class Js {
   inject(urls) {
     return this.cache.get(urls.printed)
       .then(text => {
-        return this.injectWithText(text);
+        return this.injectWithText(text, urls.printed);
       })
       .catch(() => {
         return this.injectWithUrl(urls);
@@ -100,6 +104,7 @@ export class Js {
 export class Css {
   constructor(injectInto, config = {}) {
     this.injectInto = injectInto;
+
     this.cache = new Cache({
       appPrefix: config.appPrefix
     });
@@ -136,6 +141,8 @@ export class Css {
       link.type = 'text/css';
       link.rel = 'stylesheet';
 
+      link.setAttribute('data-dactylographsy-url', url);
+
       link.href = url;
 
       if (this.injectInto) { this.injectInto.appendChild(link); }
@@ -155,24 +162,27 @@ export class Css {
     });
   }
 
-  injectWithText(text) {
+  injectWithText(text, url) {
     return new Promise(resolve => {
-      let style = document.createElement('link');
+      let
+        link = document.createElement('link');
 
-      style = document.createElement('style');
+      link = document.createElement('style');
 
-      style.textContent = text;
+      link.setAttribute('data-dactylographsy-url', url);
 
-      if (this.injectInto) { this.injectInto.appendChild(style); }
+      link.textContent = text;
 
-      resolve(style);
+      if (this.injectInto) { this.injectInto.appendChild(link); }
+
+      resolve(link);
     });
   }
 
   inject(urls) {
     return this.cache.get(urls.printed)
       .then(text => {
-        return this.injectWithText(text);
+        return this.injectWithText(text, urls.printed);
       })
       .catch(() => {
         return this.injectWithUrl(urls);

@@ -92,6 +92,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.2.1 Delay caching while still immediately taking care of 404'ed assets
 - 1.3.0 Feature detect localstorage
 - 1.4.0 Add delayed refreshing of app
+- 1.5.0 Add data-attribtue with script name to inline-scripts from cache
 
 ## Feature Ideas
 

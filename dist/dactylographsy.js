@@ -567,13 +567,15 @@
 	
 	  _createClass(Js, [{
 	    key: 'injectWithText',
-	    value: function injectWithText(text) {
+	    value: function injectWithText(text, url) {
 	      var _this = this;
 	
 	      return new Promise(function (resolve) {
 	        var script = document.createElement('script');
 	
 	        script.defer = true;
+	
+	        script.setAttribute('data-dactylographsy-url', url);
 	
 	        script.text = text;
 	
@@ -598,6 +600,8 @@
 	
 	        script.type = 'text/javascript';
 	        script.async = false;
+	
+	        script.setAttribute('data-dactylographsy-url', url);
 	
 	        // Bind to readyState or register ´onload´ callback
 	        if (script.readyState) {
@@ -667,7 +671,7 @@
 	      var _this4 = this;
 	
 	      return this.cache.get(urls.printed).then(function (text) {
-	        return _this4.injectWithText(text);
+	        return _this4.injectWithText(text, urls.printed);
 	      })['catch'](function () {
 	        return _this4.injectWithUrl(urls);
 	      });
@@ -686,6 +690,7 @@
 	    _classCallCheck(this, Css);
 	
 	    this.injectInto = injectInto;
+	
 	    this.cache = new _cache2['default']({
 	      appPrefix: config.appPrefix
 	    });
@@ -732,6 +737,8 @@
 	        link.type = 'text/css';
 	        link.rel = 'stylesheet';
 	
+	        link.setAttribute('data-dactylographsy-url', url);
+	
 	        link.href = url;
 	
 	        if (_this6.injectInto) {
@@ -753,21 +760,23 @@
 	    }
 	  }, {
 	    key: 'injectWithText',
-	    value: function injectWithText(text) {
+	    value: function injectWithText(text, url) {
 	      var _this7 = this;
 	
 	      return new Promise(function (resolve) {
-	        var style = document.createElement('link');
+	        var link = document.createElement('link');
 	
-	        style = document.createElement('style');
+	        link = document.createElement('style');
 	
-	        style.textContent = text;
+	        link.setAttribute('data-dactylographsy-url', url);
+	
+	        link.textContent = text;
 	
 	        if (_this7.injectInto) {
-	          _this7.injectInto.appendChild(style);
+	          _this7.injectInto.appendChild(link);
 	        }
 	
-	        resolve(style);
+	        resolve(link);
 	      });
 	    }
 	  }, {
@@ -776,7 +785,7 @@
 	      var _this8 = this;
 	
 	      return this.cache.get(urls.printed).then(function (text) {
-	        return _this8.injectWithText(text);
+	        return _this8.injectWithText(text, urls.printed);
 	      })['catch'](function () {
 	        return _this8.injectWithUrl(urls);
 	      });
