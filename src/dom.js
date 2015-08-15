@@ -4,9 +4,12 @@ import Ajax from './ajax';
 export class Js {
   constructor(injectInto, config = {}) {
     this.injectInto = injectInto;
+
     this.cache = new Cache({
       appPrefix: config.appPrefix
     });
+
+    this.cacheDelay = config.cacheDelay || 5000;
   }
 
   injectWithText(text, url) {
@@ -44,13 +47,13 @@ export class Js {
           if (script.readyState === 'loaded' || script.readyState === 'complete') {
             script.onreadystatechange = null;
 
-            this.ensureCache(url);
+            this.ensureCache(url, urls.singularBy, this.cacheDelay);
           }
         };
       } else {
         // Bind `onload` callback on script element
         script.onload = () => {
-          if (whichUrl === 'printed') { this.ensureCache(url, 15000); }
+          if (whichUrl === 'printed') { this.ensureCache(url, urls.singularBy, this.cacheDelay); }
         };
 
         // Inject unprinted without caching in case of error
@@ -69,9 +72,11 @@ export class Js {
     });
   }
 
-  ensureCache(url, delay = 0) {
+  ensureCache(url, singularBy = false, delay = 0) {
     return new Promise((resolve, reject) => {
         if (this.cache.has(url)) { resolve(); }
+
+        console.info(`Loading CSS from ${url} for cache in ${delay}.`);
 
         window.setTimeout(() => {
           return new Ajax()
@@ -79,7 +84,9 @@ export class Js {
             .then(response => {
               let { text: responseText } = response;
 
-              this.cache.set(responseText, 'js', url);
+              this.cache.set(responseText, 'js', url, singularBy);
+
+              console.info(`Loaded CSS from ${url} now cached.`);
 
               resolve();
             })
@@ -108,11 +115,15 @@ export class Css {
     this.cache = new Cache({
       appPrefix: config.appPrefix
     });
+
+    this.cacheDelay = config.cacheDelay || 5000;
   }
 
-  ensureCache(url, delay = 0) {
+  ensureCache(url, singularBy = false, delay = 0) {
     return new Promise((resolve, reject) => {
       if (this.cache.has(url)) { resolve(); }
+
+      console.info(`Loading CSS from ${url} for cache in ${delay}.`);
 
       window.setTimeout(() => {
         return new Ajax()
@@ -120,7 +131,9 @@ export class Css {
           .then(response => {
             let { text: responseText } = response;
 
-            this.cache.set(responseText, 'css', url);
+            this.cache.set(responseText, 'css', url, singularBy);
+
+            console.info(`Loaded CSS from ${url} now cached.`);
 
             resolve();
           }).catch(() => {
@@ -150,7 +163,7 @@ export class Css {
       // Fallback to unprinted assets after cache attempt
       // no callbacks for stylesheet injections (timeouts are worse...)
       if (whichUrl === 'printed') {
-        this.ensureCache(url)
+        this.ensureCache(url, urls.singularBy, this.cacheDelay)
           .catch(() => {
             console.info(`Could not fetch CSS from ${url} - falling back to unprinted version.`);
 

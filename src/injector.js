@@ -80,14 +80,14 @@ export default class Injector {
           this.injectInto,
           this.options
         ).inject(
-          this.url(dependency, rootUrl)
+          this.urls(dependency, rootUrl)
         );
       case '.js':
         return new Js(
           this.injectInto,
           this.options
         ).inject(
-          this.url(dependency, rootUrl)
+          this.urls(dependency, rootUrl)
         );
     }
   }
@@ -96,7 +96,7 @@ export default class Injector {
     return path.replace(/.*\/|\.[^.]*$/g, '');
   }
 
-  url(dependency, rootUrl = '') {
+  urls(dependency, rootUrl = '') {
     let
       basename = this.basename(dependency.file),
       url;
@@ -110,7 +110,8 @@ export default class Injector {
 
     return {
       printed: `/${url}/${basename}-${dependency.hash}${dependency.extension}`,
-      raw: `/${url}/${basename}${dependency.extension}`
+      raw: `/${url}/${basename}${dependency.extension}`,
+      singularBy: `/${url}/${basename}`
     };
   }
 }

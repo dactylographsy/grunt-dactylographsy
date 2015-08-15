@@ -47,8 +47,9 @@ export default class Cache {
     return localStorage.getItem(key) !== null;
   }
 
-  set(code, type, url) {
+  set(code, type, url, singularBy = false) {
     if (!this.isSupported) { return false; }
+    if (singularBy) { this.dedupe(singularBy); }
 
     let cached = {
       now: +new Date(),
@@ -92,6 +93,19 @@ export default class Cache {
       console.warn(`Localstorage not supported in browser - no caching!`);
 
       return false;
+    }
+  }
+
+  dedupe(singularBy) {
+    for (let key in localStorage) {
+      if (
+        key.indexOf(this.cachePrefix) >= 0 &&
+        key.indexOf(singularBy) >= 0
+      ) {
+        console.log(`Deduping by ${singularBy} before adding dupe in ${key}.`);
+
+        localStorage.removeItem(key);
+      }
     }
   }
 }

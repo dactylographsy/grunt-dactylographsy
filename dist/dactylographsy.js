@@ -303,8 +303,13 @@
 	  }, {
 	    key: 'set',
 	    value: function set(code, type, url) {
+	      var singularBy = arguments[3] === undefined ? false : arguments[3];
+	
 	      if (!this.isSupported) {
 	        return false;
+	      }
+	      if (singularBy) {
+	        this.dedupe(singularBy);
 	      }
 	
 	      var cached = {
@@ -349,6 +354,17 @@
 	        console.warn('Localstorage not supported in browser - no caching!');
 	
 	        return false;
+	      }
+	    }
+	  }, {
+	    key: 'dedupe',
+	    value: function dedupe(singularBy) {
+	      for (var key in localStorage) {
+	        if (key.indexOf(this.cachePrefix) >= 0 && key.indexOf(singularBy) >= 0) {
+	          console.log('Deduping by ' + singularBy + ' before adding dupe in ' + key + '.');
+	
+	          localStorage.removeItem(key);
+	        }
 	      }
 	    }
 	  }]);
@@ -481,9 +497,9 @@
 	    value: function injectDependency(dependency, rootUrl) {
 	      switch (dependency.extension) {
 	        case '.css':
-	          return new _dom.Css(this.injectInto, this.options).inject(this.url(dependency, rootUrl));
+	          return new _dom.Css(this.injectInto, this.options).inject(this.urls(dependency, rootUrl));
 	        case '.js':
-	          return new _dom.Js(this.injectInto, this.options).inject(this.url(dependency, rootUrl));
+	          return new _dom.Js(this.injectInto, this.options).inject(this.urls(dependency, rootUrl));
 	      }
 	    }
 	  }, {
@@ -492,8 +508,8 @@
 	      return path.replace(/.*\/|\.[^.]*$/g, '');
 	    }
 	  }, {
-	    key: 'url',
-	    value: function url(dependency) {
+	    key: 'urls',
+	    value: function urls(dependency) {
 	      var rootUrl = arguments[1] === undefined ? '' : arguments[1];
 	
 	      var basename = this.basename(dependency.file),
@@ -505,7 +521,8 @@
 	
 	      return {
 	        printed: '/' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension,
-	        raw: '/' + url + '/' + basename + '' + dependency.extension
+	        raw: '/' + url + '/' + basename + '' + dependency.extension,
+	        singularBy: '/' + url + '/' + basename
 	      };
 	    }
 	  }]);
@@ -560,9 +577,12 @@
 	    _classCallCheck(this, Js);
 	
 	    this.injectInto = injectInto;
+	
 	    this.cache = new _cache2['default']({
 	      appPrefix: config.appPrefix
 	    });
+	
+	    this.cacheDelay = config.cacheDelay || 5000;
 	  }
 	
 	  _createClass(Js, [{
@@ -610,14 +630,14 @@
 	            if (script.readyState === 'loaded' || script.readyState === 'complete') {
 	              script.onreadystatechange = null;
 	
-	              _this2.ensureCache(url);
+	              _this2.ensureCache(url, urls.singularBy, _this2.cacheDelay);
 	            }
 	          };
 	        } else {
 	          // Bind `onload` callback on script element
 	          script.onload = function () {
 	            if (whichUrl === 'printed') {
-	              _this2.ensureCache(url, 15000);
+	              _this2.ensureCache(url, urls.singularBy, _this2.cacheDelay);
 	            }
 	          };
 	
@@ -645,18 +665,23 @@
 	    value: function ensureCache(url) {
 	      var _this3 = this;
 	
-	      var delay = arguments[1] === undefined ? 0 : arguments[1];
+	      var singularBy = arguments[1] === undefined ? false : arguments[1];
+	      var delay = arguments[2] === undefined ? 0 : arguments[2];
 	
 	      return new Promise(function (resolve, reject) {
 	        if (_this3.cache.has(url)) {
 	          resolve();
 	        }
 	
+	        console.info('Loading CSS from ' + url + ' for cache in ' + delay + '.');
+	
 	        window.setTimeout(function () {
 	          return new _ajax2['default']().get(url).then(function (response) {
 	            var responseText = response.text;
 	
-	            _this3.cache.set(responseText, 'js', url);
+	            _this3.cache.set(responseText, 'js', url, singularBy);
+	
+	            console.info('Loaded CSS from ' + url + ' now cached.');
 	
 	            resolve();
 	          })['catch'](function () {
@@ -694,6 +719,8 @@
 	    this.cache = new _cache2['default']({
 	      appPrefix: config.appPrefix
 	    });
+	
+	    this.cacheDelay = config.cacheDelay || 5000;
 	  }
 	
 	  _createClass(Css, [{
@@ -701,18 +728,23 @@
 	    value: function ensureCache(url) {
 	      var _this5 = this;
 	
-	      var delay = arguments[1] === undefined ? 0 : arguments[1];
+	      var singularBy = arguments[1] === undefined ? false : arguments[1];
+	      var delay = arguments[2] === undefined ? 0 : arguments[2];
 	
 	      return new Promise(function (resolve, reject) {
 	        if (_this5.cache.has(url)) {
 	          resolve();
 	        }
 	
+	        console.info('Loading CSS from ' + url + ' for cache in ' + delay + '.');
+	
 	        window.setTimeout(function () {
 	          return new _ajax2['default']().get(url).then(function (response) {
 	            var responseText = response.text;
 	
-	            _this5.cache.set(responseText, 'css', url);
+	            _this5.cache.set(responseText, 'css', url, singularBy);
+	
+	            console.info('Loaded CSS from ' + url + ' now cached.');
 	
 	            resolve();
 	          })['catch'](function () {
@@ -748,7 +780,7 @@
 	        // Fallback to unprinted assets after cache attempt
 	        // no callbacks for stylesheet injections (timeouts are worse...)
 	        if (whichUrl === 'printed') {
-	          _this6.ensureCache(url)['catch'](function () {
+	          _this6.ensureCache(url, urls.singularBy, _this6.cacheDelay)['catch'](function () {
 	            console.info('Could not fetch CSS from ' + url + ' - falling back to unprinted version.');
 	
 	            _this6.injectWithUrl(urls, 'raw');

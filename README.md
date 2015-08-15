@@ -93,6 +93,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.3.0 Feature detect localstorage
 - 1.4.0 Add delayed refreshing of app
 - 1.5.0 Add data-attribtue with script name to inline-scripts from cache
+- 1.6.0 Add cache cleaning by unique identifer to not keep n-versions of files in cache and add cache delay
 
 ## Feature Ideas
 
@@ -100,5 +101,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - ~~[ ] Allow catching up existing script tags (data-default-script)~~
   - ~~Removes intiial load delay by requesting manifests~~
 - [x] Feature detect localstorage and don't cache if not present
+- [x] Add cache cleaning by unique identifer to not keep n-versions of files in cache
+- [x] Add support for specifying a delay to reload assets to cache responses
 - [ ] Add support for changing cache to e.g. sessionstorage
   - [ ] Add config for cache lifetime (for sessionstorage)
