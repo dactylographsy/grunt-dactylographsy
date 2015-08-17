@@ -522,7 +522,7 @@
 	      return {
 	        printed: '/' + url + '/' + basename + '-' + dependency.hash + '' + dependency.extension,
 	        raw: '/' + url + '/' + basename + '' + dependency.extension,
-	        singularBy: '/' + url + '/' + basename
+	        singularBy: '/' + url + '/' + basename + '' + dependency.extension
 	      };
 	    }
 	  }]);
