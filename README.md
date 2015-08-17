@@ -95,6 +95,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.5.0 Add data-attribtue with script name to inline-scripts from cache
 - 1.6.0 Add cache cleaning by unique identifer to not keep n-versions of files in cache and add cache delay
 - 1.6.1 Fix assets being deduped by filename, extension and their path
+- 1.7.0 Stable release
 
 ## Feature Ideas
 
