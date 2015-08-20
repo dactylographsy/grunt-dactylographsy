@@ -192,7 +192,7 @@
 	        });
 	      }
 	
-	      return this.restore().then(function (injectedFromCache) {
+	      return this.config.cacheManifests === false ? this.refresh() : this.restore().then(function (injectedFromCache) {
 	        var _config$refreshDelay = _this3.config.refreshDelay;
 	        var refreshDelay = _config$refreshDelay === undefined ? 5000 : _config$refreshDelay;
 	

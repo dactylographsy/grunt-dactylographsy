@@ -75,7 +75,7 @@ export default class Dactylographsy {
         });
     }
 
-    return this.restore()
+    return (this.config.cacheManifests === false) ? this.refresh() : this.restore()
       .then(injectedFromCache => {
         let { refreshDelay = 5000 } = this.config;
 
