@@ -11,6 +11,8 @@
 [![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy)
 [![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
 
+> Note: This project is in PoC stage. Still, it has proven its usefulness and has been incorporated in larger projects. Down the road it will move into an organization with seperate grunt- and gulp-task repositories and a seperate sufficiently tested browser bundle repository. 
+
 ## The Idea & Concepts
 
 Complex web applications usually consist of various assets being served from one or multiple hosts. This slows down the user experience while normal browser caching usually is not able to tackle all the resulting load retardations.
