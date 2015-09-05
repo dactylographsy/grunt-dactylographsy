@@ -1,8 +1,12 @@
 import {Css, Js} from './dom';
 import Ajax from './ajax';
+import Log from './log';
 
 export class Manifest {
-  constructor(url) {
+  constructor(url, config) {
+    const { enableLogging = false } = config;
+
+    this.log = new Log(enableLogging);
     this.url = url;
   }
 
@@ -15,17 +19,20 @@ export class Manifest {
           url: responseUrl
         } = response;
 
-        console.info(`Fetched manifest from url: ${responseUrl}.`);
+        this.log.info(`Fetched manifest from url: ${responseUrl}.`);
 
         return JSON.parse(responseText);
       }, xhr => {
-        console.error(`Could not fetch manifest with url: ${xhr.responseURL}!`);
+        this.log.error(`Could not fetch manifest with url: ${xhr.responseURL}!`);
       });
   }
 }
 
 export default class Injector {
   constructor(injectInto, manifests, options = {}) {
+    const { enableLogging = false } = options;
+
+    this.log = new Log(enableLogging);
     this.manifests = {};
     this.injectInto = injectInto;
 
@@ -41,7 +48,7 @@ export default class Injector {
   inject() {
     this.order.map(_package => {
       if (!this.manifests[_package]) {
-        console.error(`Couldn\'t find package ${_package} from injection order.`);
+        this.log.error(`Couldn\'t find package ${_package} from injection order.`);
       } else {
         this.injectManifest(this.manifests[_package]);
       }

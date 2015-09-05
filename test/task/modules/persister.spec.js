@@ -10,7 +10,7 @@ var
   packageUrl = 'timelapse',
   file = 'persister.json';
 
-describe('Persister specification', () => {
+describe('Persister', () => {
   before(() => {
   })
 
