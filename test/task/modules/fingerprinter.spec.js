@@ -6,9 +6,6 @@ var Fingerprinter = require('../../../tasks/modules/fingerprinter'),
 
 describe('Fingerprinter', () => {
   beforeEach(() => {
-  });
-
-  beforeEach(() => {
     fingerprinter = new Fingerprinter('./test/task/fixtures', []);
   });
 
