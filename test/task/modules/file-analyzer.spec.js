@@ -3,7 +3,7 @@ var expect = require('chai').expect,
     FileAnalyzer = require('../../../tasks/modules/file-analyzer'),
     fileAnalyzer;
 
-describe('FileAnalyzer specification', () => {
+describe('FileAnalyzer', () => {
   beforeEach(() => {
     fileAnalyzer = new FileAnalyzer();
   });

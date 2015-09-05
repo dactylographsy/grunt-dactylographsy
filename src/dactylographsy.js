@@ -1,10 +1,14 @@
 import Cache from './cache';
 import Injector, {Manifest} from './injector';
+import Log from './log';
 
 export default class Dactylographsy {
   constructor(options = {}) {
-    let { autorun = false } = options;
+    const
+      { autorun = false } = options,
+      { enableLogging = false } = options;
 
+    this.log = new Log(enableLogging);
     this.hookIntoDom();
     this.readConfiguration();
     this.cache = new Cache({
@@ -28,9 +32,9 @@ export default class Dactylographsy {
 
   refresh(inject = true) {
     return Promise.all(this.manifestUrls.map(url => {
-      return new Manifest(url).get();
+      return new Manifest(url, this.config).get();
     })).then(manifests => {
-      console.info(`Fetched all manifests, ${manifests.length} in total.`);
+      this.log.info(`Fetched all manifests, ${manifests.length} in total.`);
 
       this.cache.set(manifests, 'manifests', 'manifests');
 
@@ -41,7 +45,7 @@ export default class Dactylographsy {
   restore() {
     return this.cache.get('manifests')
       .then(manifests => {
-        console.info(`Resotring with manifests in cache later refreshing via network (delayed).`);
+        this.log.info(`Resotring with manifests in cache later refreshing via network (delayed).`);
 
         new Injector(
           this.injectInto,
@@ -66,7 +70,7 @@ export default class Dactylographsy {
       this.cache.get('clt', 0)
         .then(clt => {
           if (clt >= this.config.ttl) {
-            console.info(`Flushing cache due to exeeding TTL of ${this.config.ttl}.`);
+            this.log.info(`Flushing cache due to exeeding TTL of ${this.config.ttl}.`);
 
             this.cache.flush();
           } else {
@@ -86,7 +90,7 @@ export default class Dactylographsy {
           }, refreshDelay );
         });
       }).catch(() => {
-        console.info(`No manifests in cache, refreshing via network.`);
+        this.log.info(`No manifests in cache, refreshing via network.`);
 
         return this.refresh();
       });

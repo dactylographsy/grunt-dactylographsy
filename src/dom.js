@@ -1,15 +1,21 @@
 import Cache from './cache';
 import Ajax from './ajax';
+import Log from './log';
 
 export class Js {
   constructor(injectInto, config = {}) {
+    const { enableLogging = false } = config;
+
     this.injectInto = injectInto;
 
     this.cache = new Cache({
-      appPrefix: config.appPrefix
+      appPrefix: config.appPrefix,
+      enableLogging: enableLogging
     });
 
     this.cacheDelay = config.cacheDelay || 5000;
+
+    this.log = new Log(enableLogging);
   }
 
   injectWithText(text, url) {
@@ -58,7 +64,7 @@ export class Js {
 
         // Inject unprinted without caching in case of error
         script.onerror = () => {
-          console.info(`Could not fetch JavaScript from ${url} - falling back to unprinted version.`);
+          this.log.info(`Could not fetch JavaScript from ${url} - falling back to unprinted version.`);
 
           if (whichUrl === 'printed') { this.injectWithUrl(urls, 'raw'); }
         };
@@ -76,7 +82,7 @@ export class Js {
     return new Promise((resolve, reject) => {
         if (this.cache.has(url)) { resolve(); }
 
-        console.info(`Loading CSS from ${url} for cache in ${delay}.`);
+        this.log.info(`Loading CSS from ${url} for cache in ${delay}.`);
 
         window.setTimeout(() => {
           return new Ajax()
@@ -86,7 +92,7 @@ export class Js {
 
               this.cache.set(responseText, 'js', url, singularBy);
 
-              console.info(`Loaded CSS from ${url} now cached.`);
+              this.log.info(`Loaded CSS from ${url} now cached.`);
 
               resolve();
             })
@@ -110,6 +116,8 @@ export class Js {
 
 export class Css {
   constructor(injectInto, config = {}) {
+    const { enableLogging = false } = config;
+
     this.injectInto = injectInto;
 
     this.cache = new Cache({
@@ -117,13 +125,15 @@ export class Css {
     });
 
     this.cacheDelay = config.cacheDelay || 5000;
+
+    this.log = new Log(enableLogging);
   }
 
   ensureCache(url, singularBy = false, delay = 0) {
     return new Promise((resolve, reject) => {
       if (this.cache.has(url)) { resolve(); }
 
-      console.info(`Loading CSS from ${url} for cache in ${delay}.`);
+      this.log.info(`Loading CSS from ${url} for cache in ${delay}.`);
 
       window.setTimeout(() => {
         return new Ajax()
@@ -133,7 +143,7 @@ export class Css {
 
             this.cache.set(responseText, 'css', url, singularBy);
 
-            console.info(`Loaded CSS from ${url} now cached.`);
+            this.log.info(`Loaded CSS from ${url} now cached.`);
 
             resolve();
           }).catch(() => {
@@ -165,7 +175,7 @@ export class Css {
       if (whichUrl === 'printed') {
         this.ensureCache(url, urls.singularBy, this.cacheDelay)
           .catch(() => {
-            console.info(`Could not fetch CSS from ${url} - falling back to unprinted version.`);
+            this.log.info(`Could not fetch CSS from ${url} - falling back to unprinted version.`);
 
             this.injectWithUrl(urls, 'raw');
           });

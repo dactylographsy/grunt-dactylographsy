@@ -1,7 +1,12 @@
+import Log from './log';
+
 export default class Cache {
   constructor(options = {}) {
-    let defaultPrefix = '__dactylographsy';
+    const
+      defaultPrefix = '__dactylographsy',
+      { enableLogging = false } = options;
 
+    this.log = new Log(enableLogging);
     this.options = options;
     this.cachePrefix = this.options.cachePrefix || defaultPrefix;
     this.isSupported = this.supported();
@@ -30,11 +35,11 @@ export default class Cache {
       }
 
       if (_item) {
-        console.info(`Found item with key: ${key} in cache.`);
+        this.log.info(`Found item with key: ${key} in cache.`);
 
         resolve(_item.code);
       } else {
-        console.info(`Couldn\'t find item with key: ${key} in cache.`);
+        this.log.info(`Couldn\'t find item with key: ${key} in cache.`);
 
         reject();
       }
@@ -71,7 +76,7 @@ export default class Cache {
 
     for (let key in localStorage) {
       if (key.indexOf(this.cachePrefix) >= 0) {
-        console.log(`Removing item ${key} requested by flush.`);
+        this.log.log(`Removing item ${key} requested by flush.`);
 
         localStorage.removeItem(key);
       }
@@ -90,7 +95,7 @@ export default class Cache {
 
       return true;
     } catch(e) {
-      console.warn(`Localstorage not supported in browser - no caching!`);
+      this.log.warn(`Localstorage not supported in browser - no caching!`);
 
       return false;
     }
@@ -102,7 +107,7 @@ export default class Cache {
         key.indexOf(this.cachePrefix) >= 0 &&
         key.indexOf(singularBy) >= 0
       ) {
-        console.log(`Deduping by ${singularBy} before adding dupe in ${key}.`);
+        this.log.log(`Deduping by ${singularBy} before adding dupe in ${key}.`);
 
         localStorage.removeItem(key);
       }

@@ -4,7 +4,7 @@ var expect = require('chai').expect,
 var Fingerprinter = require('../../../tasks/modules/fingerprinter'),
     fingerprinter;
 
-describe('Fingerprinter specification', () => {
+describe('Fingerprinter', () => {
   beforeEach(() => {
   });
 

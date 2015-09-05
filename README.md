@@ -97,6 +97,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.6.1 Fix assets being deduped by filename, extension and their path
 - 1.7.0 Stable release
 - 1.8.0 Add 'cacheManifests' option to indicate if manifests shall be cached or not
+- 1.9.0 Add configurable logging (not removing console-statements with minifiction)
 
 ## Feature Ideas
 

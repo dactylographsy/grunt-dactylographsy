@@ -94,9 +94,13 @@
 	
 	var _cache2 = _interopRequireDefault(_cache);
 	
-	var _injector = __webpack_require__(3);
+	var _injector = __webpack_require__(4);
 	
 	var _injector2 = _interopRequireDefault(_injector);
+	
+	var _log = __webpack_require__(3);
+	
+	var _log2 = _interopRequireDefault(_log);
 	
 	var Dactylographsy = (function () {
 	  function Dactylographsy() {
@@ -105,8 +109,12 @@
 	    _classCallCheck(this, Dactylographsy);
 	
 	    var _options$autorun = options.autorun;
-	    var autorun = _options$autorun === undefined ? false : _options$autorun;
 	
+	    var autorun = _options$autorun === undefined ? false : _options$autorun;
+	    var _options$enableLogging = options.enableLogging;
+	    var enableLogging = _options$enableLogging === undefined ? false : _options$enableLogging;
+	
+	    this.log = new _log2['default'](enableLogging);
 	    this.hookIntoDom();
 	    this.readConfiguration();
 	    this.cache = new _cache2['default']({
@@ -142,9 +150,9 @@
 	      var inject = arguments[0] === undefined ? true : arguments[0];
 	
 	      return Promise.all(this.manifestUrls.map(function (url) {
-	        return new _injector.Manifest(url).get();
+	        return new _injector.Manifest(url, _this.config).get();
 	      })).then(function (manifests) {
-	        console.info('Fetched all manifests, ' + manifests.length + ' in total.');
+	        _this.log.info('Fetched all manifests, ' + manifests.length + ' in total.');
 	
 	        _this.cache.set(manifests, 'manifests', 'manifests');
 	
@@ -157,7 +165,7 @@
 	      var _this2 = this;
 	
 	      return this.cache.get('manifests').then(function (manifests) {
-	        console.info('Resotring with manifests in cache later refreshing via network (delayed).');
+	        _this2.log.info('Resotring with manifests in cache later refreshing via network (delayed).');
 	
 	        new _injector2['default'](_this2.injectInto, manifests, _this2.config).inject();
 	
@@ -183,7 +191,7 @@
 	      if (this.config.ttl) {
 	        this.cache.get('clt', 0).then(function (clt) {
 	          if (clt >= _this3.config.ttl) {
-	            console.info('Flushing cache due to exeeding TTL of ' + _this3.config.ttl + '.');
+	            _this3.log.info('Flushing cache due to exeeding TTL of ' + _this3.config.ttl + '.');
 	
 	            _this3.cache.flush();
 	          } else {
@@ -202,7 +210,7 @@
 	          }, refreshDelay);
 	        });
 	      })['catch'](function () {
-	        console.info('No manifests in cache, refreshing via network.');
+	        _this3.log.info('No manifests in cache, refreshing via network.');
 	
 	        return _this3.refresh();
 	      });
@@ -217,7 +225,7 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -235,11 +243,19 @@
 	  };
 	})();
 	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { 'default': obj };
+	}
+	
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
 	    throw new TypeError('Cannot call a class as a function');
 	  }
 	}
+	
+	var _log = __webpack_require__(3);
+	
+	var _log2 = _interopRequireDefault(_log);
 	
 	var Cache = (function () {
 	  function Cache() {
@@ -248,7 +264,10 @@
 	    _classCallCheck(this, Cache);
 	
 	    var defaultPrefix = '__dactylographsy';
+	    var _options$enableLogging = options.enableLogging;
+	    var enableLogging = _options$enableLogging === undefined ? false : _options$enableLogging;
 	
+	    this.log = new _log2['default'](enableLogging);
 	    this.options = options;
 	    this.cachePrefix = this.options.cachePrefix || defaultPrefix;
 	    this.isSupported = this.supported();
@@ -281,11 +300,11 @@
 	        }
 	
 	        if (_item) {
-	          console.info('Found item with key: ' + key + ' in cache.');
+	          _this.log.info('Found item with key: ' + key + ' in cache.');
 	
 	          resolve(_item.code);
 	        } else {
-	          console.info('Couldn\'t find item with key: ' + key + ' in cache.');
+	          _this.log.info('Couldn\'t find item with key: ' + key + ' in cache.');
 	
 	          reject();
 	        }
@@ -332,7 +351,7 @@
 	
 	      for (var key in localStorage) {
 	        if (key.indexOf(this.cachePrefix) >= 0) {
-	          console.log('Removing item ' + key + ' requested by flush.');
+	          this.log.log('Removing item ' + key + ' requested by flush.');
 	
 	          localStorage.removeItem(key);
 	        }
@@ -351,7 +370,7 @@
 	
 	        return true;
 	      } catch (e) {
-	        console.warn('Localstorage not supported in browser - no caching!');
+	        this.log.warn('Localstorage not supported in browser - no caching!');
 	
 	        return false;
 	      }
@@ -361,7 +380,7 @@
 	    value: function dedupe(singularBy) {
 	      for (var key in localStorage) {
 	        if (key.indexOf(this.cachePrefix) >= 0 && key.indexOf(singularBy) >= 0) {
-	          console.log('Deduping by ' + singularBy + ' before adding dupe in ' + key + '.');
+	          this.log.log('Deduping by ' + singularBy + ' before adding dupe in ' + key + '.');
 	
 	          localStorage.removeItem(key);
 	        }
@@ -377,6 +396,101 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = (function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	})();
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+	
+	var Log = (function () {
+	
+	  // Not level bound logging needed yet
+	
+	  function Log() {
+	    var enabled = arguments[0] === undefined ? true : arguments[0];
+	
+	    _classCallCheck(this, Log);
+	
+	    this.enabled = enabled;
+	
+	    if (this.enabled) {
+	      this.console = window.console;
+	    }
+	  }
+	
+	  _createClass(Log, [{
+	    key: "log",
+	    value: function log() {
+	      if (this.enabled) {
+	        var _console;
+	
+	        (_console = this.console).log.apply(_console, arguments);
+	      }
+	    }
+	  }, {
+	    key: "info",
+	    value: function info() {
+	      if (this.enabled) {
+	        var _console2;
+	
+	        (_console2 = this.console).info.apply(_console2, arguments);
+	      }
+	    }
+	  }, {
+	    key: "warn",
+	    value: function warn() {
+	      if (this.enabled) {
+	        var _console3;
+	
+	        (_console3 = this.console).warn.apply(_console3, arguments);
+	      }
+	    }
+	  }, {
+	    key: "debug",
+	    value: function debug() {
+	      if (this.enabled) {
+	        var _console4;
+	
+	        (_console4 = this.console).debug.apply(_console4, arguments);
+	      }
+	    }
+	  }, {
+	    key: "error",
+	    value: function error() {
+	      if (this.enabled) {
+	        var _console5;
+	
+	        (_console5 = this.console).error.apply(_console5, arguments);
+	      }
+	    }
+	  }]);
+	
+	  return Log;
+	})();
+	
+	exports["default"] = Log;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -405,31 +519,41 @@
 	  }
 	}
 	
-	var _dom = __webpack_require__(4);
+	var _dom = __webpack_require__(5);
 	
-	var _ajax = __webpack_require__(5);
+	var _ajax = __webpack_require__(6);
 	
 	var _ajax2 = _interopRequireDefault(_ajax);
 	
+	var _log = __webpack_require__(3);
+	
+	var _log2 = _interopRequireDefault(_log);
+	
 	var Manifest = (function () {
-	  function Manifest(url) {
+	  function Manifest(url, config) {
 	    _classCallCheck(this, Manifest);
 	
+	    var _config$enableLogging = config.enableLogging;
+	    var enableLogging = _config$enableLogging === undefined ? false : _config$enableLogging;
+	
+	    this.log = new _log2['default'](enableLogging);
 	    this.url = url;
 	  }
 	
 	  _createClass(Manifest, [{
 	    key: 'get',
 	    value: function get() {
+	      var _this = this;
+	
 	      return new _ajax2['default']().get(this.url).then(function (response) {
 	        var responseText = response.text;
 	        var responseUrl = response.url;
 	
-	        console.info('Fetched manifest from url: ' + responseUrl + '.');
+	        _this.log.info('Fetched manifest from url: ' + responseUrl + '.');
 	
 	        return JSON.parse(responseText);
 	      }, function (xhr) {
-	        console.error('Could not fetch manifest with url: ' + xhr.responseURL + '!');
+	        _this.log.error('Could not fetch manifest with url: ' + xhr.responseURL + '!');
 	      });
 	    }
 	  }]);
@@ -441,17 +565,21 @@
 	
 	var Injector = (function () {
 	  function Injector(injectInto, manifests) {
-	    var _this = this;
+	    var _this2 = this;
 	
 	    var options = arguments[2] === undefined ? {} : arguments[2];
 	
 	    _classCallCheck(this, Injector);
 	
+	    var _options$enableLogging = options.enableLogging;
+	    var enableLogging = _options$enableLogging === undefined ? false : _options$enableLogging;
+	
+	    this.log = new _log2['default'](enableLogging);
 	    this.manifests = {};
 	    this.injectInto = injectInto;
 	
 	    manifests.forEach(function (manifest) {
-	      _this.manifests[manifest['package']] = manifest;
+	      _this2.manifests[manifest['package']] = manifest;
 	    });
 	
 	    this.options = options;
@@ -462,20 +590,20 @@
 	  _createClass(Injector, [{
 	    key: 'inject',
 	    value: function inject() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      this.order.map(function (_package) {
-	        if (!_this2.manifests[_package]) {
-	          console.error('Couldn\'t find package ' + _package + ' from injection order.');
+	        if (!_this3.manifests[_package]) {
+	          _this3.log.error('Couldn\'t find package ' + _package + ' from injection order.');
 	        } else {
-	          _this2.injectManifest(_this2.manifests[_package]);
+	          _this3.injectManifest(_this3.manifests[_package]);
 	        }
 	      });
 	    }
 	  }, {
 	    key: 'injectManifest',
 	    value: function injectManifest(manifest) {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      var hashes = Object.keys(manifest.hashes);
 	
@@ -487,7 +615,7 @@
 	          return _url !== undefined && _url !== null;
 	        }).join('/');
 	
-	        _this3.injectDependency(dependency, rootUrl);
+	        _this4.injectDependency(dependency, rootUrl);
 	
 	        return hash;
 	      });
@@ -533,7 +661,7 @@
 	exports['default'] = Injector;
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -566,9 +694,13 @@
 	
 	var _cache2 = _interopRequireDefault(_cache);
 	
-	var _ajax = __webpack_require__(5);
+	var _ajax = __webpack_require__(6);
 	
 	var _ajax2 = _interopRequireDefault(_ajax);
+	
+	var _log = __webpack_require__(3);
+	
+	var _log2 = _interopRequireDefault(_log);
 	
 	var Js = (function () {
 	  function Js(injectInto) {
@@ -576,13 +708,19 @@
 	
 	    _classCallCheck(this, Js);
 	
+	    var _config$enableLogging = config.enableLogging;
+	    var enableLogging = _config$enableLogging === undefined ? false : _config$enableLogging;
+	
 	    this.injectInto = injectInto;
 	
 	    this.cache = new _cache2['default']({
-	      appPrefix: config.appPrefix
+	      appPrefix: config.appPrefix,
+	      enableLogging: enableLogging
 	    });
 	
 	    this.cacheDelay = config.cacheDelay || 5000;
+	
+	    this.log = new _log2['default'](enableLogging);
 	  }
 	
 	  _createClass(Js, [{
@@ -643,7 +781,7 @@
 	
 	          // Inject unprinted without caching in case of error
 	          script.onerror = function () {
-	            console.info('Could not fetch JavaScript from ' + url + ' - falling back to unprinted version.');
+	            _this2.log.info('Could not fetch JavaScript from ' + url + ' - falling back to unprinted version.');
 	
 	            if (whichUrl === 'printed') {
 	              _this2.injectWithUrl(urls, 'raw');
@@ -673,7 +811,7 @@
 	          resolve();
 	        }
 	
-	        console.info('Loading CSS from ' + url + ' for cache in ' + delay + '.');
+	        _this3.log.info('Loading CSS from ' + url + ' for cache in ' + delay + '.');
 	
 	        window.setTimeout(function () {
 	          return new _ajax2['default']().get(url).then(function (response) {
@@ -681,7 +819,7 @@
 	
 	            _this3.cache.set(responseText, 'js', url, singularBy);
 	
-	            console.info('Loaded CSS from ' + url + ' now cached.');
+	            _this3.log.info('Loaded CSS from ' + url + ' now cached.');
 	
 	            resolve();
 	          })['catch'](function () {
@@ -714,6 +852,9 @@
 	
 	    _classCallCheck(this, Css);
 	
+	    var _config$enableLogging2 = config.enableLogging;
+	    var enableLogging = _config$enableLogging2 === undefined ? false : _config$enableLogging2;
+	
 	    this.injectInto = injectInto;
 	
 	    this.cache = new _cache2['default']({
@@ -721,6 +862,8 @@
 	    });
 	
 	    this.cacheDelay = config.cacheDelay || 5000;
+	
+	    this.log = new _log2['default'](enableLogging);
 	  }
 	
 	  _createClass(Css, [{
@@ -736,7 +879,7 @@
 	          resolve();
 	        }
 	
-	        console.info('Loading CSS from ' + url + ' for cache in ' + delay + '.');
+	        _this5.log.info('Loading CSS from ' + url + ' for cache in ' + delay + '.');
 	
 	        window.setTimeout(function () {
 	          return new _ajax2['default']().get(url).then(function (response) {
@@ -744,7 +887,7 @@
 	
 	            _this5.cache.set(responseText, 'css', url, singularBy);
 	
-	            console.info('Loaded CSS from ' + url + ' now cached.');
+	            _this5.log.info('Loaded CSS from ' + url + ' now cached.');
 	
 	            resolve();
 	          })['catch'](function () {
@@ -781,7 +924,7 @@
 	        // no callbacks for stylesheet injections (timeouts are worse...)
 	        if (whichUrl === 'printed') {
 	          _this6.ensureCache(url, urls.singularBy, _this6.cacheDelay)['catch'](function () {
-	            console.info('Could not fetch CSS from ' + url + ' - falling back to unprinted version.');
+	            _this6.log.info('Could not fetch CSS from ' + url + ' - falling back to unprinted version.');
 	
 	            _this6.injectWithUrl(urls, 'raw');
 	          });
@@ -830,7 +973,7 @@
 	exports.Css = Css;
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
