@@ -14,6 +14,11 @@ module.exports = function(grunt) {
       browsers: ['Chrome'],
       reporters: ['mocha'],
       singleRun: false
+    },
+    ci: {
+      browsers: ['Firefox'],
+      reporters: ['mocha'],
+      singleRun: true
     }
   };
 };

@@ -14,7 +14,8 @@
   ],
   "ci-test": [
     "test",
-    "mochacov:ci"
+    "mochacov:ci",
+    "karma:ci"
   ],
   "dev": [
     "default",
