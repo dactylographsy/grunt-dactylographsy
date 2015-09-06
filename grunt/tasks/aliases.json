@@ -8,13 +8,13 @@
   ],
   "test": [
     "eslint",
-    "mochacov:html",
     "mochacov:spec",
     "karma:local"
   ],
   "ci-test": [
-    "test",
-    "mochacov:ci",
+    "eslint",
+    "mochacov:html",
+    "mochacov:spec",
     "karma:ci"
   ],
   "dev": [
