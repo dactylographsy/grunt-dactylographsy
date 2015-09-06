@@ -12,10 +12,14 @@ export default class Cache {
     this.isSupported = this.supported();
 
     if (this.options.appPrefix) {
-      this.cachePrefix = `${this.cachePrefix}--${this.options.appPrefix}__`;
-    } else {
+      this.cachePrefix = `${this.cachePrefix}--${this.options.appPrefix}`;
+    } else if (!this.options.cachePrefix) {
       this.cachePrefix += '__';
     }
+  }
+
+  getPrefix() {
+    return this.cachePrefix;
   }
 
   get(key, defaultValue) {
@@ -49,7 +53,7 @@ export default class Cache {
   has(key) {
     if (!this.isSupported) { return false; }
 
-    return localStorage.getItem(key) !== null;
+    return localStorage.getItem(`${this.cachePrefix}-${key}`) !== null;
   }
 
   set(code, type, url, singularBy = false) {
@@ -68,7 +72,7 @@ export default class Cache {
       JSON.stringify(cached)
     );
 
-    return true;
+    return cached;
   }
 
   flush() {

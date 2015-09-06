@@ -1,6 +1,5 @@
 export class DOMUtil {
   constructor() {
-
   }
 
   findJsByDataUrl(url) {

@@ -9,7 +9,7 @@ module.exports = {
     options: {
       reporter: 'html-cov',
       quiet: true,
-      output: 'test/coverage.html'
+      output: 'test/coverage/task.html'
     }
   },
   spec: {
@@ -18,7 +18,9 @@ module.exports = {
     }
   },
   options: {
-    files: 'test/task/**/*.js',
+    files: [
+      'test/task/**/*.js'
+    ],
     compilers: [
       'js:babel/register'
     ]
