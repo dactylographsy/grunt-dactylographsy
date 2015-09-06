@@ -56,41 +56,6 @@ describe('Cache', () => {
     });
   });
 
-  describe('supported', () => {
-    it('should indicate if local storage is not supported', () => {
-      let
-        cache,
-        setItem = window.localStorage.setItem;
-
-      window.localStorage.setItem = function() {
-        throw '...';
-      };
-
-      cache = new Cache();
-
-      cache.supported().should.be.false;
-
-      window.localStorage.setItem = setItem;
-    });
-
-    it('should indicate if local storage is supported', () => {
-      let
-        cache,
-        setItem = window.localStorage.setItem,
-        removeItem = window.localStorage.removeItem;
-
-      window.localStorage.setItem = function() {};
-      window.localStorage.removeItem = function() {};
-
-      cache = new Cache();
-
-      cache.supported().should.be.true;
-
-      window.localStorage.setItem = setItem;
-      window.localStorage.removeItem = removeItem;
-    });
-  });
-
   describe('set', () => {
     var
       cache;
@@ -99,9 +64,7 @@ describe('Cache', () => {
       cache = new Cache({
         cachePrefix: 'karma-spec'
       });
-    });
 
-    afterEach(() => {
       cache.flush();
     });
 
@@ -159,11 +122,9 @@ describe('Cache', () => {
 
     beforeEach(() => {
       cache = new Cache({
-        cachePrefix: 'karma-spec'
+        cachePrefix: 'karma-spec-has'
       });
-    });
 
-    afterEach(() => {
       cache.flush();
     });
 
@@ -194,6 +155,9 @@ describe('Cache', () => {
       cache2 = new Cache({
         cachePrefix: 'karma-spec-2'
       });
+
+      cache1.flush();
+      cache2.flush();
     });
 
     it('should flush the entire cache scoped to the prefix', () => {
@@ -260,6 +224,41 @@ describe('Cache', () => {
       });
 
       cache.has('karma-spec-defaulted.com').should.be.true;
+    });
+  });
+
+  describe('supported', () => {
+    it('should indicate if local storage is not supported', () => {
+      let
+        cache,
+        setItem = Storage.prototype.setItem;
+
+      Storage.prototype.setItem = function() {
+        throw false;
+      };
+
+      cache = new Cache();
+
+      cache.supported().should.be.false;
+
+      Storage.prototype.setItem = setItem;
+    });
+
+    it('should indicate if local storage is supported', () => {
+      let
+        cache,
+        setItem = Storage.prototype.setItem,
+        removeItem = Storage.prototype.removeItem;
+
+      Storage.prototype.setItem = function() {};
+      Storage.prototype.removeItem = function() {};
+
+      cache = new Cache();
+
+      cache.supported().should.be.true;
+
+      window.localStorage.setItem = setItem;
+      window.localStorage.removeItem = removeItem;
     });
   });
 });

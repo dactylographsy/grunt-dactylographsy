@@ -88,7 +88,7 @@ describe('DOM', () => {
           url = 'css-code-check.css',
           injection = css.injectWithText(code, url);
 
-        expect(domUtils.findCssByDataUrl(url)[0].innerText).to.equal(code);
+        expect(domUtils.findCssByDataUrl(url)[0].textContent).to.equal(code);
       });
     });
 
@@ -210,7 +210,7 @@ describe('DOM', () => {
           url = 'js-code-check.js',
           injection = js.injectWithText(code, url);
 
-        expect(domUtils.findJsByDataUrl(url)[0].innerText).to.equal(code);
+        expect(domUtils.findJsByDataUrl(url)[0].textContent).to.equal(code);
       });
     });
 
