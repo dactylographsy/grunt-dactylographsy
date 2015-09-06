@@ -46,13 +46,20 @@ export default class Injector {
   }
 
   inject() {
-    this.order.map(_package => {
+    let
+      injections = [];
+
+    this.order.forEach(_package => {
       if (!this.manifests[_package]) {
         this.log.error(`Couldn\'t find package ${_package} from injection order.`);
       } else {
         this.injectManifest(this.manifests[_package]);
+
+        injections.push(_package);
       }
     });
+
+    return injections;
   }
 
   injectManifest(manifest) {
@@ -76,7 +83,7 @@ export default class Injector {
         rootUrl
       );
 
-      return hash;
+      return {hash, dependency, rootUrl};
     });
   }
 
