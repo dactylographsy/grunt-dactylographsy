@@ -4,15 +4,28 @@ module.exports = function(config) {
     basePath: '../',
     frameworks: ['mocha'],
     files: [
-      'test/src/**/*.spec.js'
+      'test/src/**/*.spec.js', {
+        pattern: 'test/src/fixtures/**/*.json',
+        watched: true,
+        served: true,
+        included: false
+      }
     ],
 
     preprocessors: {
-      'test/src/**/*.js': ['webpack']
+      'test/src/**/*.js': ['webpack', 'sourcemap']
+    },
+
+    reporters: ['progress', 'coverage'],
+
+    coverageReporter: {
+      type: 'html',
+      dir: 'test/coverage/'
     },
 
     webpack: {
       plugins: [],
+      devtool: 'inline-source-map',
       resolve: {
         alias: {},
         modulesDirectories: [
@@ -23,21 +36,16 @@ module.exports = function(config) {
         ],
         extensions: ['', '.js']
       },
-      externals: {
-        fs: 'null'
-      },
+      externals: {},
       module: {
+        preLoaders: [{
+          test: /(\.jsx)|(\.js)$/,
+          exclude: /(node_modules|bower_components|test)/,
+          loader: 'isparta-instrumenter'
+        }],
         loaders: [{
-          // A stupid hack required for sinon so that it knows it is not running in AMD
-          test: /sinon\.js$/,
-          loader: "imports?define=>false"
-        }, {
           test: /\.json/,
           loader: 'json-loader'
-        }, {
-          test: /\.js?$/,
-          loaders: ['babel'],
-          exclude: /node_modules/
         }, {
           test: /\.js$/,
           exclude: /node_modules/,
@@ -55,7 +63,7 @@ module.exports = function(config) {
     },
 
     exclude: [],
-    port: 8080,
+    port: 9876,
     customLaunchers: {},
 
     browsers: [
@@ -64,6 +72,8 @@ module.exports = function(config) {
 
     plugins: [
       'karma-webpack',
+      'karma-sourcemap-loader',
+      'karma-coverage',
       'karma-chrome-launcher',
       'karma-mocha-reporter',
       'karma-mocha',

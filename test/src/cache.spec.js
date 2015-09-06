@@ -7,7 +7,7 @@ chai.should();
 chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
-describe('Cache specification', () => {
+describe('Cache', () => {
   beforeEach(function() {
   });
 

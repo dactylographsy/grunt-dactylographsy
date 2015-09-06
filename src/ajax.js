@@ -23,12 +23,6 @@ export default class Ajax {
         xhr.withCredentials = true;
       }
 
-      if (options.customHeaders) {
-        options.customHeaders.forEach(header => {
-          xhr.setRequestHeader(header.name, header.value);
-        });
-      }
-
       // Response handlers.
       xhr.onload = () => {
         if (xhr.status >= 400) {
