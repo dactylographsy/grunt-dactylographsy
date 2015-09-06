@@ -75,6 +75,7 @@ module.exports = function(config) {
       'karma-sourcemap-loader',
       'karma-coverage',
       'karma-chrome-launcher',
+      'karma-firefox-launcher',
       'karma-mocha-reporter',
       'karma-mocha',
     ],
