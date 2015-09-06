@@ -14,8 +14,7 @@
   "ci-test": [
     "eslint",
     "mochacov:html",
-    "mochacov:spec",
-    "karma:ci"
+    "mochacov:spec"
   ],
   "dev": [
     "default",
