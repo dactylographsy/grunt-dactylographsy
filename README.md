@@ -11,7 +11,7 @@
 [![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy)
 [![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
 
-> Note: This project is in PoC stage. Still, it has proven its usefulness and has been incorporated in larger projects. Down the road it will move into an organization with seperate grunt- and gulp-task repositories and a seperate sufficiently tested browser bundle repository. 
+> Note: This project is in PoC stage. Still, it has proven its usefulness and has been incorporated in larger projects. Down the road it will move into an organization with seperate grunt- and gulp-task repositories and a seperate sufficiently tested browser bundle repository.
 
 ## The Idea & Concepts
 
@@ -111,3 +111,8 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - [x] Add support for specifying a delay to reload assets to cache responses
 - [ ] Add support for changing cache to e.g. sessionstorage
   - [ ] Add config for cache lifetime (for sessionstorage)
+
+## Acknowledgements
+
+- ...to [BrowerStack](https://browerstack.com) for supporting this project with their awesome services for free!
+- ...to great people around me supporting me with ideas and feedback!
