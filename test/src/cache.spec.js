@@ -101,18 +101,16 @@ describe('Cache', () => {
       item.code.should.be.equal('foo');
     });
 
-    it('should allow singluarizing items by parts of the key', () => {
-      cache.set('foo', 'string', 'karma-spec-1.com');
+    it('should allow singluarizing items by the singularBy property', () => {
+      cache.set('foo', 'string', 'karma-spec-1.com', 'karma');
       cache.set('foo', 'string', 'karma-spec-2.com', 'karma');
 
       cache.get('karma-spec-2.com').should.be.fulfilled;
       cache.get('karma-spec-1.com').should.be.rejected;
 
       cache.set('foo', 'string', 'karma-spec-1.com');
-      cache.set('foo', 'string', 'karma-spec-2.com', 'spec');
 
-      cache.get('karma-spec-2.com').should.be.fulfilled;
-      cache.get('karma-spec-1.com').should.be.rejected;
+      cache.get('karma-spec-1.com').should.be.fulfilled;
     });
   });
 

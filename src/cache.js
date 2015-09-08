@@ -64,7 +64,8 @@ export default class Cache {
       now: +new Date(),
       url: url,
       code: code,
-      type: type
+      type: type,
+      singularBy: ( typeof singularBy === 'string' ) ? singularBy : undefined
     };
 
     localStorage.setItem(
@@ -107,9 +108,18 @@ export default class Cache {
 
   dedupe(singularBy) {
     for (let key in localStorage) {
+      const
+        dactylographsyItem = key.indexOf(this.cachePrefix) >= 0;
+      let
+        item;
+
+      if (!dactylographsyItem) { continue; }
+
+      item = JSON.parse(localStorage.getItem(key));
+
       if (
-        key.indexOf(this.cachePrefix) >= 0 &&
-        key.indexOf(singularBy) >= 0
+        ( (typeof singularBy === 'string') && (typeof item.singularBy === 'string') ) &&
+        item.singularBy === singularBy
       ) {
         this.log.log(`Deduping by ${singularBy} before adding dupe in ${key}.`);
 
