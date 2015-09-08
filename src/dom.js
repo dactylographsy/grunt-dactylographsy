@@ -22,7 +22,7 @@ export class Js {
     return new Promise(resolve => {
       let script = document.createElement('script');
 
-      script.defer = true;
+      script.defer = false;
 
       script.setAttribute('data-dactylographsy-url', url);
 

@@ -101,6 +101,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.8.0 Add 'cacheManifests' option to indicate if manifests shall be cached or not
 - 1.9.0 Add configurable logging (not removing console-statements with minifiction)
 - 1.9.1 Fix major issue in script injection order (promise resolving on cache with earlier rejection)
+- 1.9.2 Fix auto deferring inline scripts breaking the injection order too
 
 ## Feature Ideas
 
