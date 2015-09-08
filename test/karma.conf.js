@@ -101,6 +101,14 @@ module.exports = function(config) {
         browser_version: '40.0',
         browser: 'firefox',
         os_version: 'Yosemite'
+      },
+      bs_ipad_mini: {
+        base: 'BrowserStack',
+        device: 'iPad mini Retina',
+        os: 'ios',
+        os_version: '7.0',
+        browser_version: null,
+        browser: 'Mobile Safari'
       }
     },
 
@@ -121,6 +129,6 @@ module.exports = function(config) {
 
     singleRun: true,
     colors: true,
-    logLevel: config.LOG_WARN
+    logLevel: config.LOG_INFO
   });
 };

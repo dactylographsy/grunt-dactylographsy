@@ -15,7 +15,7 @@
     "mochacov:html",
     "mochacov:spec",
     "karma:travis_ci",
-    "karma:bs_ci"
+    "karma:bs_desktop_ci"
   ],
   "dev": [
     "default",
