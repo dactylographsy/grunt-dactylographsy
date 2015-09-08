@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       singleRun: true
     },
     travis_ci: {
-      browsers: ['firefox'],
+      browsers: ['Firefox'],
       reporters: ['mocha'],
       singleRun: true
     }
