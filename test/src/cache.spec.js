@@ -11,6 +11,41 @@ describe('Cache', () => {
   beforeEach(function() {
   });
 
+  describe('supported', () => {
+    it('should indicate if local storage is not supported', () => {
+      let
+        cache,
+        setItem = Storage.prototype.setItem;
+
+      Storage.prototype.setItem = function() {
+        throw false;
+      };
+
+      cache = new Cache();
+
+      cache.supported().should.be.false;
+
+      Storage.prototype.setItem = setItem;
+    });
+
+    it('should indicate if local storage is supported', () => {
+      let
+        cache,
+        setItem = Storage.prototype.setItem,
+        removeItem = Storage.prototype.removeItem;
+
+      Storage.prototype.setItem = function() {};
+      Storage.prototype.removeItem = function() {};
+
+      cache = new Cache();
+
+      cache.supported().should.be.true;
+
+      Storage.prototype.setItem = setItem;
+      Storage.prototype.removeItem = removeItem;
+    });
+  });
+
   describe('getPrefix', () => {
     it('should have a default prefix', () => {
       const cache = new Cache({
@@ -222,41 +257,6 @@ describe('Cache', () => {
       });
 
       cache.has('karma-spec-defaulted.com').should.be.true;
-    });
-  });
-
-  describe('supported', () => {
-    it('should indicate if local storage is not supported', () => {
-      let
-        cache,
-        setItem = Storage.prototype.setItem;
-
-      Storage.prototype.setItem = function() {
-        throw false;
-      };
-
-      cache = new Cache();
-
-      cache.supported().should.be.false;
-
-      Storage.prototype.setItem = setItem;
-    });
-
-    it('should indicate if local storage is supported', () => {
-      let
-        cache,
-        setItem = Storage.prototype.setItem,
-        removeItem = Storage.prototype.removeItem;
-
-      Storage.prototype.setItem = function() {};
-      Storage.prototype.removeItem = function() {};
-
-      cache = new Cache();
-
-      cache.supported().should.be.true;
-
-      window.localStorage.setItem = setItem;
-      window.localStorage.removeItem = removeItem;
     });
   });
 });
