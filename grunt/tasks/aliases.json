@@ -14,7 +14,8 @@
     "eslint",
     "mochacov:html",
     "mochacov:spec",
-    "karma:ci"
+    "karma:travis_ci",
+    "karma:bs_ci"
   ],
   "dev": [
     "default",

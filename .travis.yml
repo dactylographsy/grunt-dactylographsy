@@ -1,12 +1,16 @@
 language: node_js
 node_js:
-  - '0.12'
+- '0.12'
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 before_install:
-  - npm install -g grunt-cli
-  - npm link
-  - npm link grunt-dactylographsy
+- npm install -g grunt-cli
+- npm link
+- npm link grunt-dactylographsy
 notifications:
   email: false
+env:
+  global:
+  - secure: bLEXmW3PoYs2yp9FOGA8EbZL0TMzjLjuxNRr52tAKLk6kzdQCrRpo4nMqAUOtTGX119JScELZufG/KWWPEs+jraLm7iIvWiGZTNgX+AxwkwjBEC68OkIG6dwqMydvZGt1iapGUr02PQ+F395XkhFZKHUBh2fTFVk6q0XbcO07z0=
+  - secure: TTkJE23UYSUeW2EBKaME86OC+JGIzCjCJ55VjYFEiFSNwre22qmPZMlffKwCvvrMZhBgPlVg25cWf6IJ37Ox4Gk//LT6C4ExHVaZTKDRQZkAL4L7zHv972UvtNt1L2trRN2G3TCVDm7iInmxK35H6eJdNEEoA4i6dkHovQdQdEQ=

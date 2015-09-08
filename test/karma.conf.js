@@ -64,7 +64,45 @@ module.exports = function(config) {
 
     exclude: [],
     port: 9876,
-    customLaunchers: {},
+
+    browserStack: {
+      project: 'grunt-dactylographsy',
+      username: process.env.BS_USERNAME,
+      accessKey: process.env.BS_ACCESSKEY
+    },
+
+    customLaunchers: {
+      bs_win81_ie_11: {
+        base: 'BrowserStack',
+        browser: 'ie',
+        browser_version: '11.0',
+        os: 'Windows',
+        os_version: '8.1'
+      },
+      bs_win8_ie_10: {
+        base: 'BrowserStack',
+        browser: 'ie',
+        browser_version: '10.0',
+        os: 'Windows',
+        os_version: '8'
+      },
+      bs_mavericks_chrome_44: {
+        base: 'BrowserStack',
+        device: null,
+        os: 'OS X',
+        browser_version: '44.0',
+        browser: 'chrome',
+        os_version: 'Mavericks'
+      },
+      bs_yosemite_firefox_40: {
+        base: 'BrowserStack',
+        device: null,
+        os: 'OS X',
+        browser_version: '40.0',
+        browser: 'firefox',
+        os_version: 'Yosemite'
+      }
+    },
 
     browsers: [
       'Chrome'
@@ -75,6 +113,7 @@ module.exports = function(config) {
       'karma-sourcemap-loader',
       'karma-coverage',
       'karma-chrome-launcher',
+      'karma-browserstack-launcher',
       'karma-firefox-launcher',
       'karma-mocha-reporter',
       'karma-mocha',

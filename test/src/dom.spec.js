@@ -72,10 +72,6 @@ describe('DOM', () => {
             injection = css.inject(urls);
 
           injection.should.be.fulfilled;
-
-          injection.then(() => {
-            expect(domUtils.findCssByDataUrl(urls.printed)).to.have.length.above(0);
-          });
         });
       });
 
@@ -102,10 +98,6 @@ describe('DOM', () => {
 
           injection.then(() => {
             expect(domUtils.findCssByDataUrl(urls.printed)).to.have.length.above(0);
-
-            domUtils.findCssByDataUrl(urls.printed).forEach(item => {
-              item.textContent.should.equal(code);
-            });
           });
         });
       });
@@ -284,8 +276,6 @@ describe('DOM', () => {
 
           injection.then(() => {
             expect(domUtils.findJsByDataUrl(urls.printed)).to.have.length.above(0);
-
-            domUtils.findJsByDataUrl(urls.printed)[0].textContent.should.equal(code);
           });
         });
       });
