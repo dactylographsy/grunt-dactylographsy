@@ -3,7 +3,7 @@ module.exports = {
   build: {
     target: 'web',
     debug: true,
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     entry: './src/index.js',
     output: {
       path: './dist/',
@@ -22,7 +22,7 @@ module.exports = {
     module: {
       loaders: [
         { test: /\.js?$/, loaders: ['babel'], exclude: /node_modules/ },
-        { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?optional[]=runtim'}
+        { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?optional[]=runtime'}
       ]
     }
   }

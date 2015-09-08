@@ -41,6 +41,8 @@ export class Js {
         script = document.createElement('script'),
         url = urls[whichUrl];
 
+      this.log.info(`Injecting JavaScript from ${url}.`);
+
       script.type = 'text/javascript';
       script.async = false;
 
@@ -107,8 +109,7 @@ export class Js {
     return this.cache.get(urls.printed)
       .then(text => {
         return this.injectWithText(text, urls.printed);
-      })
-      .catch(() => {
+      }, () => {
         return this.injectWithUrl(urls);
       });
   }
@@ -206,8 +207,7 @@ export class Css {
     return this.cache.get(urls.printed)
       .then(text => {
         return this.injectWithText(text, urls.printed);
-      })
-      .catch(() => {
+      }, () => {
         return this.injectWithUrl(urls);
       });
   }

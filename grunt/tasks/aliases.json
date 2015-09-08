@@ -1,7 +1,6 @@
 {
   "default": [
     "clean",
-    "test",
     "webpack",
     "uglify",
     "copy"
