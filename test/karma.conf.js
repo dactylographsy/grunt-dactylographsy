@@ -121,6 +121,6 @@ module.exports = function(config) {
 
     singleRun: true,
     colors: true,
-    logLevel: config.LOG_INFO
+    logLevel: config.LOG_WARN
   });
 };
