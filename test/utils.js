@@ -30,7 +30,7 @@ export class DOMUtil {
     let
       nodes,
       scripts = this.findAllJs(),
-      styles = this.findAllCss;
+      styles = this.findAllCss();
 
     nodes = [...styles, ...scripts];
 

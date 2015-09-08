@@ -1,4 +1,5 @@
 import {Css, Js} from '../../src/dom';
+import Cache from '../../src/cache';
 import chai from 'chai';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -45,6 +46,68 @@ describe('DOM', () => {
 
       it('should have a function to cache an url', () => {
         css.ensureCache.should.be.a('function');
+      });
+    });
+
+    describe('inject', () => {
+      var
+        urls = {
+          printed: 'hashed-css-inject.css',
+          raw: 'raw-css-inject.css'
+        },
+        css,
+        code = '.foo {color: blue}';
+
+      describe('an uncached file', () => {
+        beforeEach(() => {
+          domUtils.removeAll();
+
+          css = new Css(document.querySelector('body'), {
+            enableLogging: false
+          });
+        });
+
+        it('should inject it by with its url', () => {
+          let
+            injection = css.inject(urls);
+
+          injection.should.be.fulfilled;
+
+          injection.then(() => {
+            expect(domUtils.findCssByDataUrl(urls.printed)).to.have.length.above(0);
+          });
+        });
+      });
+
+      describe('an cached file', () => {
+        var
+          cache = new Cache();
+
+        beforeEach(() => {
+          domUtils.removeAll();
+          cache.flush();
+
+          css = new Css(document.querySelector('body'), {
+            enableLogging: false
+          });
+        });
+
+        it('should inject it by with its code inline', () => {
+          cache.set(code, 'css', urls.printed);
+
+          let
+            injection = css.inject(urls);
+
+          injection.should.be.fulfilled;
+
+          injection.then(() => {
+            expect(domUtils.findCssByDataUrl(urls.printed)).to.have.length.above(0);
+
+            domUtils.findCssByDataUrl(urls.printed).forEach(item => {
+              item.textContent.should.equal(code);
+            });
+          });
+        });
       });
     });
 
@@ -165,6 +228,66 @@ describe('DOM', () => {
 
       it('should have a function to cache an url', () => {
         js.ensureCache.should.be.a('function');
+      });
+    });
+
+    describe('inject', () => {
+      var
+        urls = {
+          printed: 'hashed-js-inject.js',
+          raw: 'raw-js-inject.js'
+        },
+        js,
+        code = 'var a = "b"';
+
+      describe('an uncached file', () => {
+        beforeEach(() => {
+          domUtils.removeAll();
+
+          js = new Js(document.querySelector('body'), {
+            enableLogging: false
+          });
+        });
+
+        it('should inject it by with its url', () => {
+          let
+            injection = js.inject(urls);
+
+          injection.should.be.fulfilled;
+
+          injection.then(() => {
+            expect(domUtils.findJsByDataUrl(urls.printed)).to.have.length.above(0);
+          });
+        });
+      });
+
+      describe('an cached file', () => {
+        var
+          cache = new Cache();
+
+        beforeEach(() => {
+          domUtils.removeAll();
+          cache.flush();
+
+          js = new Js(document.querySelector('body'), {
+            enableLogging: false
+          });
+        });
+
+        it('should inject it by with its code inline', () => {
+          cache.set(code, 'js', urls.printed);
+
+          let
+            injection = js.inject(urls);
+
+          injection.should.be.fulfilled;
+
+          injection.then(() => {
+            expect(domUtils.findJsByDataUrl(urls.printed)).to.have.length.above(0);
+
+            domUtils.findJsByDataUrl(urls.printed)[0].textContent.should.equal(code);
+          });
+        });
       });
     });
 
