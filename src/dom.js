@@ -23,14 +23,14 @@ export class Js {
       let script = document.createElement('script');
 
       script.defer = false;
+      script.async = false;
 
       script.setAttribute('data-dactylographsy-url', url);
 
       script.text = text;
 
-      if (this.injectInto) { this.injectInto.appendChild(script); }
-
-      resolve(script);
+      if (this.injectInto) { resolve(this.injectInto.appendChild(script)); }
+      else { resolve(script); }
     });
   }
 
@@ -43,8 +43,8 @@ export class Js {
 
       this.log.info(`Injecting JavaScript from ${url}.`);
 
-      script.type = 'text/javascript';
       script.async = false;
+      script.defer = false;
 
       script.setAttribute('data-dactylographsy-url', url);
 
@@ -74,9 +74,8 @@ export class Js {
 
       script.src = url;
 
-      if (this.injectInto) { this.injectInto.appendChild(script); }
-
-      resolve(script);
+      if (this.injectInto) { resolve(this.injectInto.appendChild(script)); }
+      else { resolve(script); }
     });
   }
 
@@ -169,8 +168,6 @@ export class Css {
 
       link.href = url;
 
-      if (this.injectInto) { this.injectInto.appendChild(link); }
-
       // Fallback to unprinted assets after cache attempt
       // no callbacks for stylesheet injections (timeouts are worse...)
       if (whichUrl === 'printed') {
@@ -182,7 +179,8 @@ export class Css {
           });
       }
 
-      resolve(link);
+      if (this.injectInto) { resolve(this.injectInto.appendChild(link)); }
+      else { resolve(link); }
     });
   }
 
@@ -197,9 +195,8 @@ export class Css {
 
       link.textContent = text;
 
-      if (this.injectInto) { this.injectInto.appendChild(link); }
-
-      resolve(link);
+      if (this.injectInto) { resolve(this.injectInto.appendChild(link)); }
+      else { resolve(link); }
     });
   }
 

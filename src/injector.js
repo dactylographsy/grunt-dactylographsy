@@ -30,15 +30,15 @@ export class Manifest {
 
 export default class Injector {
   constructor(injectInto, manifests, options = {}) {
-    const { enableLogging = false } = options;
+    const {
+      enableLogging = false
+    } = options;
 
     this.log = new Log(enableLogging);
     this.manifests = {};
     this.injectInto = injectInto;
 
-    manifests.forEach(manifest => {
-      this.manifests[manifest.package] = manifest;
-    });
+    manifests.forEach(manifest => { this.manifests[manifest.package] = manifest; });
 
     this.options = options;
     this.prefix = options.prefix;
@@ -46,27 +46,38 @@ export default class Injector {
   }
 
   inject() {
-    let
-      injections = [];
+    const flatten = list => list.reduce(
+      (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+    );
 
-    this.order.forEach(_package => {
-      if (!this.manifests[_package]) {
-        this.log.error(`Couldn\'t find package ${_package} from injection order.`);
-      } else {
-        this.injectManifest(this.manifests[_package]);
+    return Promise.all(
+      this.order.map(_package => {
+        if (!this.manifests[_package]) {
+          this.log.error(`Couldn\'t find package ${_package} from injection order.`);
 
-        injections.push(_package);
-      }
+          return Promise.reject();
+        } else {
+          return this.injectManifest(this.manifests[_package]);
+        }
+      })
+    ).then(manifests => {
+      let
+        frag = document.createDocumentFragment(),
+        dependencies = flatten(manifests);
+
+      dependencies.forEach(elem => { frag.appendChild(elem); });
+
+      this.injectInto.appendChild(frag);
+
+      return Promise.resolve(dependencies);
     });
-
-    return injections;
   }
 
   injectManifest(manifest) {
     let
       hashes = Object.keys(manifest.hashes);
 
-    return hashes.map(hash => {
+    return Promise.all(hashes.map(hash => {
       let
         dependency = manifest.hashes[hash],
         rootUrl;
@@ -78,31 +89,31 @@ export default class Injector {
         );
       }).join('/');
 
-      this.injectDependency(
+      return this.injectDependency(
         dependency,
         rootUrl
       );
-
-      return {hash, dependency, rootUrl};
-    });
+    }));
   }
 
   injectDependency(dependency, rootUrl) {
     switch (dependency.extension) {
       case '.css':
         return new Css(
-          this.injectInto,
+          undefined,
           this.options
         ).inject(
           this.urls(dependency, rootUrl)
         );
       case '.js':
         return new Js(
-          this.injectInto,
+          undefined,
           this.options
         ).inject(
           this.urls(dependency, rootUrl)
         );
+      default:
+        Promise.resolve(false);
     }
   }
 

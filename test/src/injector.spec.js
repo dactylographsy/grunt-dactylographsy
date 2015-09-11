@@ -65,59 +65,56 @@ describe('Injector', () => {
           order: ['vertical-2', 'vertical-1']
         });
 
-      injections = injector.inject();
-
-      injections.should.have.length(2);
-      injections.should.include('vertical-1');
-      injections.should.include('vertical-2');
+      injections = injector.inject().then(packages => {
+        packages.should.have.length(5);
+      });
     });
   });
 
   describe('injectManifest', () => {
+    var
+      findInjectionBySrc = (injections, itemSrc) => {
+        return injections.filter(injection => {
+          let
+            src = injection.src || injection.href;
+
+          return src.indexOf(itemSrc) > -1;
+        })
+      };
+
     it('should inject all dependencies from a manifest', () => {
       let
-        dependencies;
+        injections;
       const
         injector = new Injector(document.querySelector('body'), [], {
           enableLogging: false,
           order: []
         });
 
-      dependencies = injector.injectManifest(fixtureManifests[0]);
+      injections = injector.injectManifest(fixtureManifests[0]);
 
-      dependencies.filter(entry => entry.hash === 'hash1').should.have.length(1);
-      dependencies.filter(entry => entry.hash === 'hash2').should.have.length(1);
-      dependencies.filter(entry => entry.hash === 'hash3').should.have.length(1);
-    });
-
-    it('should extract all dependencies from a manifest', () => {
-      let
-        dependencies;
-      const
-        injector = new Injector(document.querySelector('body'), [], {
-          enableLogging: false,
-          order: []
-        });
-
-      dependencies = injector.injectManifest(fixtureManifests[0]);
-
-      dependencies.filter(entry => entry.dependency.file === '1.js').should.have.length(1);
-      dependencies.filter(entry => entry.dependency.file === '2.js').should.have.length(1);
-      dependencies.filter(entry => entry.dependency.file === '1.css').should.have.length(1);
+      injections.then(injections => {
+        findInjectionBySrc(injections, 'hash1').should.have.length(1);
+        findInjectionBySrc(injections, 'hash2').should.have.length(1);
+        findInjectionBySrc(injections, 'hash3').should.have.length(1);
+      });
     });
 
     it('should generate a url from package- and root url', () => {
       let
-        dependencies;
+        injections;
       const
         injector = new Injector(document.querySelector('body'), [], {
           enableLogging: false,
           order: []
         });
 
-      dependencies = injector.injectManifest(fixtureManifests[0]);
+      injections = injector.injectManifest(fixtureManifests[0]);
 
-      dependencies[0].rootUrl.should.be.equal(`${fixtureManifests[0].rootUrl}/${fixtureManifests[0].packageUrl}`)
+      injections.then(injections => {
+        findInjectionBySrc(injections, fixtureManifests[0].rootUrl).should.have.length(3);
+        findInjectionBySrc(injections, fixtureManifests[0].packageUrl).should.have.length(3);
+      });
     });
   });
 
