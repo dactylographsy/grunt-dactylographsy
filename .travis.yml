@@ -10,6 +10,8 @@ before_install:
 - npm link grunt-dactylographsy
 notifications:
   email: false
+  slack:
+    secure: Q2NlerQC8kgzjkD3gnMFs4VPJ35UMZ8tG6tj/PAHCK4U0iPBJ2Um6WxEa9JvvFe2eXiAIZhq2ZWhfU2cPh/fOYIQYNxGeXFJ8SfnXIJiCzEWCzFtNvRQt1scjukXNPxnvvvT/xP/hfmc9/7EnwlgAQoEQ+1SlMjKIc71g3qzvSw=
 env:
   global:
   - secure: bLEXmW3PoYs2yp9FOGA8EbZL0TMzjLjuxNRr52tAKLk6kzdQCrRpo4nMqAUOtTGX119JScELZufG/KWWPEs+jraLm7iIvWiGZTNgX+AxwkwjBEC68OkIG6dwqMydvZGt1iapGUr02PQ+F395XkhFZKHUBh2fTFVk6q0XbcO07z0=
