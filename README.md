@@ -1,6 +1,6 @@
 # grunt-dactylographsy
 
-> Grunt task for fetching and injecting fingerprinted assets from multiple manifest files with general caching.
+> Grunt task generating manifests with fingerprinted assets to be injected and cached via localstorage.
 
 [![NPM](https://nodei.co/npm/grunt-dactylographsy.png?mini=true)](https://nodei.co/npm/grunt-dactylographsy/)
 
@@ -75,6 +75,42 @@ package: 'None'
 ```
 
 An example configuration can be found [here](https://github.com/tdeekens/grunt-dactylographsy/blob/master/grunt/tasks/dactylographsy.js) and if you want to check the options you might want to check the [Gruntfile](https://github.com/tdeekens/grunt-dactylographsy/blob/master/tasks/dactylographsy.js#L22) itself.
+
+## The client-side bundle
+
+### Embedding as `<script />`-tag
+
+```html
+<script
+  id="dactylographsy"
+  charset="utf-8"
+  src="../dist/dactylographsy.js"
+  data-config='{"order":["vertical-1", "vertical-2"], "ttl": 1, "appPrefix": "example", "refreshDelay": 1000, "enableLogging": true}'
+  data-manifests='["vertical-1/dactylographsy.json", "vertical-2/dactylographsy.json"]'>
+</script>
+```
+
+More examples can be found in `/examples`.
+
+### Options
+
+```js
+// Manifests in order of which their assets will be injected
+order: []
+// Time to live when exceeded causes whole cache (local storage) to be flushed
+ttl: null
+// Prefix for the application prepended to all assets' paths
+appPrefix: null
+// Delay in ms when exceeded performs reqeusts to check if assets are outdated
+refreshDelay: null
+// Delay in ms when exceeded performing caching requests to assets as XHRs
+cacheDelay: null
+// Boolean indicating if manifests shall be cached - if false app always resolves to
+// current version but slows down launch
+cacheManifests: true
+// Enable logging as opt-in giving output of what dactylographsy is doing
+enableLogging: false
+```
 
 ## Developing & Contributing
 
