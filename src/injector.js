@@ -46,9 +46,30 @@ export default class Injector {
   }
 
   inject() {
-    const flatten = list => list.reduce(
-      (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
-    );
+    const
+      flatten = list => list.reduce(
+        (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+      ),
+      injectIntoDOM = (dependencies, idx = 0) => {
+        const elem = dependencies[idx];
+
+        if (elem === undefined) { return; }
+        else if (elem.getAttribute('data-dactylographsy-uncached-js')) {
+          this.injectInto.appendChild(elem);
+
+          elem.addEventListener('load', () => {
+            injectIntoDOM(dependencies, ++idx);
+          });
+
+          elem.addEventListener('error', () => {
+            injectIntoDOM(dependencies, ++idx);
+          });
+        } else {
+          this.injectInto.appendChild(elem);
+
+          injectIntoDOM(dependencies, ++idx);
+        }
+      };
 
     return Promise.all(
       this.order.map(_package => {
@@ -61,13 +82,9 @@ export default class Injector {
         }
       })
     ).then(manifests => {
-      let
-        frag = document.createDocumentFragment(),
-        dependencies = flatten(manifests);
+      const dependencies = flatten(manifests);
 
-      dependencies.forEach(elem => { frag.appendChild(elem); });
-
-      this.injectInto.appendChild(frag);
+      injectIntoDOM(dependencies);
 
       return Promise.resolve(dependencies);
     });

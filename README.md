@@ -140,6 +140,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/t
 - 1.9.2 Fix auto deferring inline scripts breaking the injection order too
 - 1.9.3 Fix singarity of cached assets for adding entry on serialized object
 - 1.10.0 Add using document fragments for injections (speeds up DOM access)
+- 1.11.0 Fix issue where cached js-files where executed before uncached files
 
 ## Feature Ideas
 

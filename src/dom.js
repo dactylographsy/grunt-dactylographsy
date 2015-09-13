@@ -47,6 +47,7 @@ export class Js {
       script.defer = false;
 
       script.setAttribute('data-dactylographsy-url', url);
+      script.setAttribute('data-dactylographsy-uncached-js', true);
 
       // Bind to readyState or register ´onload´ callback
       if (script.readyState) {
@@ -165,6 +166,7 @@ export class Css {
       link.rel = 'stylesheet';
 
       link.setAttribute('data-dactylographsy-url', url);
+      link.setAttribute('data-dactylographsy-uncached-css', true);
 
       link.href = url;
 
