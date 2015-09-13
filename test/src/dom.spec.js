@@ -10,6 +10,7 @@ chai.use(sinonChai);
 chai.use(chaiAsPromised);
 
 var
+  fixtureUrl = 'base/test/src/fixtures/code.js',
   domUtils,
   expect;
 

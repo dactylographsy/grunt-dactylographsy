@@ -36,12 +36,12 @@ var
     packageUrl: 'vertical-2',
     rootUrl: 'example',
     hashes: {
-      hash1: {
+      hash4: {
         hash: 'hash4',
         file: '4.js',
         extension: '.js'
       },
-      hash2: {
+      hash5: {
         hash: 'hash5',
         file: '5.css',
         extension: '.css'
@@ -62,11 +62,45 @@ describe('Injector', () => {
       const
         injector = new Injector(document.querySelector('body'), fixtureManifests, {
           enableLogging: false,
-          order: ['vertical-2', 'vertical-1']
+          order: ['vertical-1', 'vertical-2']
         });
 
       injections = injector.inject().then(packages => {
+        let
+          manifestDependencies = {};
+
+        Object.assign(manifestDependencies, fixtureManifests[0].hashes);
+        Object.assign(manifestDependencies, fixtureManifests[1].hashes);
+
         packages.should.have.length(5);
+
+        Object.keys(manifestDependencies).map((prop, idx) => {
+          packages[idx].getAttribute('data-dactylographsy-url').should.contain(manifestDependencies[prop].hash);
+        });
+      });
+    });
+
+    it('should ', () => {
+      let
+        injections;
+      const
+        injector = new Injector(document.querySelector('body'), fixtureManifests, {
+          enableLogging: false,
+          order: ['vertical-1', 'vertical-2']
+        });
+
+      injections = injector.inject().then(packages => {
+        let
+          manifestDependencies = {};
+
+        Object.assign(manifestDependencies, fixtureManifests[0].hashes);
+        Object.assign(manifestDependencies, fixtureManifests[1].hashes);
+
+        packages.should.have.length(5);
+
+        Object.keys(manifestDependencies).map((prop, idx) => {
+          packages[idx].getAttribute('data-dactylographsy-url').should.contain(manifestDependencies[prop].hash);
+        });
       });
     });
   });
