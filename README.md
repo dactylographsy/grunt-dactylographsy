@@ -11,7 +11,7 @@
 [![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy)
 [![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
 
-> Note: This project is in PoC stage. Still, it has proven its usefulness and has been incorporated in larger projects. Down the road it will move into an organization with seperate grunt- and gulp-task repositories and a seperate sufficiently tested browser bundle repository.
+> Note: This project is in an early stage. Still, it has proven its usefulness and has been incorporated in larger projects. Down the road it will move into an organization with seperate grunt- and gulp-task repositories.
 
 ## The Idea & Concepts
 
