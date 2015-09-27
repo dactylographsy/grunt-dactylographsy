@@ -1,15 +1,15 @@
 # grunt-dactylographsy
 
+[![Build Status](https://travis-ci.org/tdeekens/grunt-dactylographsy.svg?branch=master)](https://travis-ci.org/tdeekens/grunt-dactylographsy) ♦️
+[![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy) ♦️ 
+[![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
+
 > Grunt task generating manifests with fingerprinted assets to be injected and cached via localstorage.
 
-[![NPM](https://nodei.co/npm/grunt-dactylographsy.png?mini=true)](https://nodei.co/npm/grunt-dactylographsy/)
+[![NPM](https://nodei.co/npm/grunt-dactylographsy.png)](https://nodei.co/npm/grunt-dactylographsy/)
 
-[![npm version](https://badge.fury.io/js/grunt-dactylographsy.svg)](http://badge.fury.io/js/grunt-dactylographsy)
+[![npm version](https://badge.fury.io/js/grunt-dactylographsy.svg)](http://badge.fury.io/js/grunt-dactylographsy) ♦️
 [![Bower version](https://badge.fury.io/bo/dactylographsy.svg)](http://badge.fury.io/bo/dactylographsy)
-
-[![Build Status](https://travis-ci.org/tdeekens/grunt-dactylographsy.svg?branch=master)](https://travis-ci.org/tdeekens/grunt-dactylographsy)
-[![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy)
-[![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
 
 > Note: This project is in an early stage. Still, it has proven its usefulness and has been incorporated in larger projects. Down the road it will move into an organization with seperate grunt- and gulp-task repositories.
 
