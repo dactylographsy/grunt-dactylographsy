@@ -1,8 +1,9 @@
 # grunt-dactylographsy
 
 [![Build Status](https://travis-ci.org/tdeekens/grunt-dactylographsy.svg?branch=master)](https://travis-ci.org/tdeekens/grunt-dactylographsy) ♦️
-[![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy) ♦️ 
-[![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy)
+[![Coverage Status](https://coveralls.io/repos/tdeekens/grunt-dactylographsy/badge.png)](https://coveralls.io/r/tdeekens/grunt-dactylographsy) ♦️
+[![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy) ♦️
+[![devDependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy/dev-status.svg)](https://david-dm.org/tdeekens/grunt-dactylographsy#info=devDependencies)
 
 > Grunt task generating manifests with fingerprinted assets to be injected and cached via localstorage.
 
