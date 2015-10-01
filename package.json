@@ -49,7 +49,7 @@
     "grunt-mocha-test": "0.12.7",
     "grunt-shell": "1.1.2",
     "grunt-webpack": "1.0.11",
-    "isparta": "1.4.2",
+    "isparta": "3.1.0",
     "isparta-instrumenter-loader": "0.2.1",
     "istanbul": "0.3.21",
     "karma": "0.13.10",
