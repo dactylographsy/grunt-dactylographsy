@@ -54,7 +54,7 @@
     "istanbul": "0.3.22",
     "karma": "0.13.10",
     "karma-browserstack-launcher": "0.1.5",
-    "karma-chrome-launcher": "0.2.0",
+    "karma-chrome-launcher": "0.2.1",
     "karma-coverage": "git+https://github.com/douglasduteil/karma-coverage#next",
     "karma-firefox-launcher": "0.1.6",
     "karma-mocha": "0.2.0",
