@@ -52,7 +52,7 @@
     "isparta": "3.1.0",
     "isparta-instrumenter-loader": "0.2.1",
     "istanbul": "0.3.22",
-    "karma": "0.13.10",
+    "karma": "0.13.11",
     "karma-browserstack-launcher": "0.1.5",
     "karma-chrome-launcher": "0.2.1",
     "karma-coverage": "git+https://github.com/douglasduteil/karma-coverage#next",
