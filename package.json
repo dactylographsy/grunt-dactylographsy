@@ -1,13 +1,13 @@
 {
   "name": "grunt-dactylographsy",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "A grunt plugin to fingerprint your assets while outputing the result.",
   "scripts": {
     "test": "grunt ci-test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tdeekens/grunt-dactylographsy.git"
+    "url": "https://github.com/dactylographsy/grunt-dactylographsy.git"
   },
   "keywords": [
     "grunt",
@@ -19,13 +19,12 @@
   "author": "Tobias Deekens <nerd@tdeekens.name> (http://tdeekens.name)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tdeekens/grunt-dactylographsy/issues"
+    "url": "https://github.com/dactylographsy/grunt-dactylographsy/issues"
   },
-  "homepage": "https://github.com/tdeekens/grunt-dactylographsy",
+  "homepage": "https://github.com/dactylographsy/grunt-dactylographsy",
   "dependencies": {
-    "async": "1.4.2",
-    "lodash": "3.10.1",
-    "sprint": "0.3.1"
+    "grunt-cli": "0.1.13",
+    "node-dactylographsy": "1.0.1"
   },
   "devDependencies": {
     "babel": "5.8.23",

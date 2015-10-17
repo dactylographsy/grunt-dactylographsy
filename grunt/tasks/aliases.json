@@ -7,13 +7,10 @@
   ],
   "test": [
     "eslint",
-    "mochacov:spec",
     "karma:local"
   ],
   "ci-test": [
     "eslint",
-    "mochacov:html",
-    "mochacov:spec",
     "karma:travis_ci",
     "karma:bs_desktop_ci"
   ],

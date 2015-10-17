@@ -5,10 +5,5 @@
   },
   "dist": {
     "js": "dist/"
-  },
-  "test": {
-    "mocha": [
-      "test/**/*.js"
-    ]
   }
 }

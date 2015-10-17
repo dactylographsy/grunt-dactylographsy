@@ -8,9 +8,9 @@
 
 module.exports = function(grunt) {
   var
-    Persister = require('./modules/persister'),
-    Fingerprinter = require('./modules/fingerprinter'),
-    FileAnalyzer = require('./modules/file-analyzer');
+    Persister = require('node-dactylographsy').Persister,
+    Fingerprinter = require('node-dactylographsy').Fingerprinter,
+    FileAnalyzer = require('node-dactylographsy').FileAnalyzer;
 
   grunt.registerMultiTask('dactylographsy', 'Fingerprint your assets', function() {
     var
