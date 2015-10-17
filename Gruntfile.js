@@ -12,7 +12,6 @@ module.exports = function(grunt) {
     configPath: path.join(process.cwd(), 'grunt', 'tasks'),
     init: true,
     data: {
-      bower_version: require('./bower.json').version,
       options: {},
       paths: require(path.join(process.cwd(), 'grunt', 'options/') + 'paths.json')
     },
