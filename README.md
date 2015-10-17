@@ -1,8 +1,8 @@
 # grunt-dactylographsy
 
-[![Build Status](https://travis-ci.org/tdeekens/grunt-dactylographsy.svg?branch=master)](https://travis-ci.org/tdeekens/grunt-dactylographsy) ♦️
-[![Dependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/tdeekens/grunt-dactylographsy) ♦️
-[![devDependency Status](https://david-dm.org/tdeekens/grunt-dactylographsy/dev-status.svg)](https://david-dm.org/tdeekens/grunt-dactylographsy#info=devDependencies) ♦
+[![Build Status](https://travis-ci.org/dactylographsy/grunt-dactylographsy.svg?branch=master)](https://travis-ci.org/dactylographsy/grunt-dactylographsy) ♦️
+[![Dependency Status](https://david-dm.org/dactylographsy/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/dactylographsy/grunt-dactylographsy) ♦️
+[![devDependency Status](https://david-dm.org/dactylographsy/grunt-dactylographsy/dev-status.svg)](https://david-dm.org/dactylographsy/grunt-dactylographsy#info=devDependencies) ♦
 [![npm version](https://badge.fury.io/js/grunt-dactylographsy.svg)](http://badge.fury.io/js/grunt-dactylographsy)
 
 > Grunt task generating manifests with fingerprinted assets to be injected and cached via localstorage.
@@ -52,11 +52,11 @@ devPaths: []
 package: 'None'
 ```
 
-An example configuration can be found [here](https://github.com/tdeekens/grunt-dactylographsy/blob/master/grunt/tasks/dactylographsy.js) and if you want to check the options you might want to check the [Gruntfile](https://github.com/tdeekens/grunt-dactylographsy/blob/master/tasks/dactylographsy.js#L22) itself.
+An example configuration can be found [here](https://github.com/dactylographsy/grunt-dactylographsy/blob/master/grunt/tasks/dactylographsy.js) and if you want to check the options you might want to check the [Gruntfile](https://github.com/dactylographsy/grunt-dactylographsy/blob/master/tasks/dactylographsy.js#L22) itself.
 
 ## Developing & Contributing
 
-Developing on the task alone is fairly easy just `git clone https://github.com/tdeekens/grunt-dactylographsy.git` then `cd grunt-dactylographsy`. From there one has to link the package to itself via `npm link && npm link grunt-dactylographsy` which will allow for calling `grunt dev`. Now just work the `task/dactylographsy.js` and check results - feel free to submit a pull-request!
+Developing on the task alone is fairly easy just `git clone https://github.com/dactylographsy/grunt-dactylographsy.git` then `cd grunt-dactylographsy`. From there one has to link the package to itself via `npm link && npm link grunt-dactylographsy` which will allow for calling `grunt dev`. Now just work the `task/dactylographsy.js` and check results - feel free to submit a pull-request!
 
 ## Release History
 
