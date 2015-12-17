@@ -7,6 +7,8 @@
 
 > Grunt task generating manifests with fingerprinted assets to be injected and cached via localstorage.
 
+Please refer to the [browser related repository](https://github.com/dactylographsy/browser-dactylographsy/blob/master/README.md) for a more comprehensive explaination behind the concepts of the dactylographsy project.
+
 [![NPM](https://nodei.co/npm/grunt-dactylographsy.png)](https://nodei.co/npm/grunt-dactylographsy/)
 
 ## Getting Started
