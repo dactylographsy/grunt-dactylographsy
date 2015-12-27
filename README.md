@@ -87,6 +87,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/d
 - 1.11.0 Fix issue where cached js-files where executed before uncached files
 - 1.12.0 Add using `node-dactylographsy` and remove thereby duplicate sources
 - 1.13.0 Moves all browser related sources to `browser-dactylographsy`
+- 1.14.0 Add manifest fingerprint (versions manifests)
 
 ## Acknowledgements
 
