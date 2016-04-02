@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dactylographsy/grunt-dactylographsy",
   "dependencies": {
-    "grunt-cli": "1.1.0",
+    "grunt-cli": "1.2.0",
     "node-dactylographsy": "1.2.1"
   },
   "devDependencies": {
