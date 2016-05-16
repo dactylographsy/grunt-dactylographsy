@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "babel-eslint": "6.0.4",
-    "eslint": "2.9.0",
+    "eslint": "2.10.2",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
     "grunt-eslint": "18.1.0",
