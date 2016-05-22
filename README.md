@@ -88,6 +88,7 @@ Developing on the task alone is fairly easy just `git clone https://github.com/d
 - 1.12.0 Add using `node-dactylographsy` and remove thereby duplicate sources
 - 1.13.0 Moves all browser related sources to `browser-dactylographsy`
 - 1.14.0 Add manifest fingerprint (versions manifests)
+- 1.16.0 Add string hashing
 
 ## Acknowledgements
 
