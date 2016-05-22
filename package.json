@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dactylographsy/grunt-dactylographsy",
   "dependencies": {
-    "node-dactylographsy": "1.2.4"
+    "node-dactylographsy": "1.3.0"
   },
   "devDependencies": {
     "babel-eslint": "6.0.4",
