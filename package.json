@@ -1,6 +1,6 @@
 {
   "name": "grunt-dactylographsy",
-  "version": "1.16.0",
+  "version": "2.0.0",
   "description": "A grunt plugin to fingerprint your assets while outputing the result.",
   "scripts": {
     "test": "grunt ci-test"
@@ -8,6 +8,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/dactylographsy/grunt-dactylographsy.git"
+  },
+  "engineStrict" : true,
+  "engines": {
+      "node": ">= 4"
   },
   "keywords": [
     "grunt",
