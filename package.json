@@ -9,9 +9,9 @@
     "type": "git",
     "url": "https://github.com/dactylographsy/grunt-dactylographsy.git"
   },
-  "engineStrict" : true,
+  "engineStrict": true,
   "engines": {
-      "node": ">= 4"
+    "node": ">= 4"
   },
   "keywords": [
     "grunt",
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "babel-eslint": "6.1.2",
-    "eslint": "3.1.0",
+    "eslint": "3.2.0",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
     "grunt-eslint": "19.0.0",
