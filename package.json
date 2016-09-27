@@ -30,7 +30,7 @@
     "node-dactylographsy": "2.0.1"
   },
   "devDependencies": {
-    "babel-eslint": "6.1.2",
+    "babel-eslint": "7.0.0",
     "eslint": "3.2.2",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
