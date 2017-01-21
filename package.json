@@ -27,11 +27,11 @@
   },
   "homepage": "https://github.com/dactylographsy/grunt-dactylographsy",
   "dependencies": {
-    "node-dactylographsy": "2.0.2"
+    "node-dactylographsy": "2.0.3"
   },
   "devDependencies": {
-    "babel-eslint": "7.0.0",
-    "eslint": "3.8.0",
+    "babel-eslint": "7.1.1",
+    "eslint": "3.14.0",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
     "grunt-eslint": "19.0.0",
