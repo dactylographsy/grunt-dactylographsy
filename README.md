@@ -1,5 +1,7 @@
 # grunt-dactylographsy
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dactylographsy/grunt-dactylographsy.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/dactylographsy/grunt-dactylographsy.svg?branch=master)](https://travis-ci.org/dactylographsy/grunt-dactylographsy) ♦️
 [![Dependency Status](https://david-dm.org/dactylographsy/grunt-dactylographsy.svg?style=flat)](https://david-dm.org/dactylographsy/grunt-dactylographsy) ♦️
 [![devDependency Status](https://david-dm.org/dactylographsy/grunt-dactylographsy/dev-status.svg)](https://david-dm.org/dactylographsy/grunt-dactylographsy#info=devDependencies) ♦
